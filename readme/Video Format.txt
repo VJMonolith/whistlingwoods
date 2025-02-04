@@ -1,0 +1,14 @@
+Handbrake Settings:
+
+Video:
+Format - webm
+Codec - vp8
+Fps - 30
+Resolution - 1280x720
+Ratio - 16:9
+
+Audio:
+Codec: Opus
+Bitrate: 160
+Mix: Stereo
+Samplerate: 44.1
