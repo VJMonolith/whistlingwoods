@@ -249,7 +249,7 @@
       </div>
     <div>
       <!-- Scene Setup -->
-      <a-scene mindar-image="imageTargetSrc: target/image.mind; showStats: false; uiScanning: #example-scanning-overlay;" embedded color-space="sRGB" renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false">
+      <a-scene mindar-image="filterMinCF:0.1; filterBeta: 10; warmupTolerance: 1; missTolerance: 1; imageTargetSrc: target/image.mind; showStats: false; uiScanning: #example-scanning-overlay;" embedded color-space="sRGB" renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false">
         
         <!-- Assets -->
         <a-assets>
