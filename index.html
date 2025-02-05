@@ -277,7 +277,7 @@
       </div>
     <div>
       <!-- Scene Setup -->
-      <a-scene mindar-image="filterMinCF:0.1; filterBeta: 10; warmupTolerance: 1; missTolerance: 1; imageTargetSrc: target/image.mind; showStats: false; uiScanning: #example-scanning-overlay;" embedded color-space="sRGB" renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: true">
+      <a-scene mindar-image="filterMinCF:0.001; filterBeta: 50; warmupTolerance: 5; missTolerance: 5; imageTargetSrc: target/image.mind; showStats: false; uiScanning: #example-scanning-overlay;" embedded color-space="sRGB" renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: true">
         
         <!-- Assets -->
         <a-assets>
@@ -293,7 +293,7 @@
         <a-camera position="0 0 0" look-controls="enabled: false" cursor="fuse: false; rayOrigin: mouse;" raycaster="far: 10000; objects: .clickable"></a-camera>
 
         <!-- Image Target -->
-        <a-entity id="mytarget" mytarget mindar-image-target="targetIndex: 0">
+        <a-entity id="mytarget" mytarget mindar-image-target="targetIndex: 0" position="0 0 -0.5" scale="1.5 1.5 1.5">
 
           <!-- Image Place Holder -->
           <a-plane visible=false src="#card" position="0 0 0.05" height="0.6" width="0.96" rotation="0 0 0"></a-plane>
