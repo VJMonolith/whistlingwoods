@@ -155,7 +155,7 @@
   });
 </script> -->
 
-<script>
+<!-- <script>
   function adjustForOrientation() {
     const camera = document.querySelector("a-camera");
     const scene = document.querySelector("a-scene");
@@ -190,6 +190,16 @@
       }
     });
   });
+</script> -->
+
+<script>
+  window.addEventListener("orientationchange", function () {
+  const scene = document.querySelector("a-scene");
+  scene.pause();
+  setTimeout(() => {
+    scene.play();
+  }, 500);
+});
 </script>
 
 
@@ -306,7 +316,7 @@
       </div>
     <div>
       <!-- Scene Setup -->
-      <a-scene mindar-image="filterMinCF:0.01; filterBeta: 50; warmupTolerance: 5; missTolerance: 5; imageTargetSrc: target/image.mind; showStats: false; uiScanning: #example-scanning-overlay;" embedded color-space="sRGB" renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: true">
+      <a-scene mindar-image="filterMinCF:0.001; filterBeta: 30; warmupTolerance: 3; missTolerance: 3; imageTargetSrc: target/image.mind; showStats: false; uiScanning: #example-scanning-overlay;" embedded color-space="sRGB" renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: true">
         
         <!-- Assets -->
         <a-assets>
