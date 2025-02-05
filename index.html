@@ -1,9 +1,7 @@
 <html>
   <head>
-    <!-- <meta name="viewport" content="width=device-width, initial-scale=1" /> -->
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-
 
     <!-- Mind AR Plugin -->
     <!-- <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
@@ -25,32 +23,29 @@
         // Video Player
         const testVideo = document.createElement( "video" );
         const canplayWebm = testVideo.canPlayType( 'video/webm; codecs="vp8, opus"' );
-
-        // Video Play/Pause staus
-        let status = false;
         
-      // var showInfo = () => {
-      //   const downloadButton = document.querySelector("#download-button");
-      //   const cta = document.querySelector("#cta-panel");
+      var showInfo = () => {
+        const downloadButton = document.querySelector("#download-button");
+        const cta = document.querySelector("#cta-panel");
 
-      //   const showCtaItem = (item) => {
-      //       document.querySelector("#cta-item" + item).setAttribute("visible", 0 === item);
-      //   }
+        const showCtaItem = (item) => {
+            document.querySelector("#cta-item" + item).setAttribute("visible", 0 === item);
+        }
         
-      //   showCtaItem(0)
+        showCtaItem(0)
 
-      //   setTimeout(() => { // Delay the animation
-      //     cta.setAttribute("visible", true); // Make the CTA Button visible
-      //     cta.emit('pop'); // Start the pop-out animation
-      //     setTimeout(() => {
-      //       cta.emit('reset'); // Reset to normal size
-      //     }, 180); // Reset after pop animation duration
-      //   }, 250); // Delay of 250 milliseconds
+        setTimeout(() => { // Delay the animation
+          cta.setAttribute("visible", true); // Make the CTA Button visible
+          cta.emit('pop'); // Start the pop-out animation
+          setTimeout(() => {
+            cta.emit('reset'); // Reset to normal size
+          }, 180); // Reset after pop animation duration
+        }, 250); // Delay of 250 milliseconds
 
-      //   downloadButton.addEventListener('click', function (evt) {
-      //     window.location.href="https://monolith.asia";
-      //   });       
-      // }
+        downloadButton.addEventListener('click', function (evt) {
+          window.location.href="https://monolith.asia";
+        });       
+      }
 
       const showPortfolio = () => {
         const portfolio = document.querySelector("#portfolio-panel");
@@ -72,34 +67,30 @@
           }, 180); // Reset after pop animation duration
         }, 250); // Delay of 250 milliseconds
         
-        // if (portfolio.getAttribute("visible", true)) {
-        //   paintandquestVideoLink.getAttribute("src");
-        //   paintandquestVideoWebm.play();
-        //   paintandquestVideoWebm.pause();
-        // }
+        if (portfolio.getAttribute("visible", true)) {
+          paintandquestVideoLink.getAttribute("src");
+          paintandquestVideoWebm.play();
+          paintandquestVideoWebm.pause();
+        }
 
         // Play/Pause the video on pressing the play button
-        // paintandquestPreviewButton.addEventListener('click', () => {
-        //   console.log("status",status);
-        //   if(!status) {
-        //     paintandquestPreviewButton.setAttribute("visible", false);
+        paintandquestPreviewButton.addEventListener('click', () => {
+          if(paintandquestPreviewButton.getAttribute("visible") === true) {
+            paintandquestPreviewButton.setAttribute("visible", false);
 
-        //     if (canplayWebm === "probably" || canplayWebm === "maybe") {
-        //       paintandquestVideoLink.setAttribute("src", "#mtpl-video-webm");
-        //       paintandquestVideoWebm.play();
-        //       status = true;
-        //     }
-        //   }
-        //   else{
-        //     paintandquestPreviewButton.setAttribute("visible", true);
-            
-        //     if (canplayWebm === "probably" || canplayWebm === "maybe") {
-        //       paintandquestVideoLink.setAttribute("src", "#mtpl-video-webm");
-        //       paintandquestVideoWebm.pause();
-        //       status = false;
-        //     }
-        //   }
-        // });
+            if (canplayWebm === "probably" || canplayWebm === "maybe") {
+              paintandquestVideoLink.setAttribute("src", "#mtpl-video-webm");
+              paintandquestVideoWebm.play();
+            }
+          } else {
+            paintandquestPreviewButton.setAttribute("visible", true);
+
+            if (canplayWebm === "probably" || canplayWebm === "maybe") {
+              paintandquestVideoLink.setAttribute("src", "#mtpl-video-webm");
+              paintandquestVideoWebm.pause();
+            }
+          }
+        });
       }
 
       // AR Config
@@ -107,37 +98,12 @@
         
         init: function () {
 
-          
+          // Video Play/Pause staus
+          let status = true;
 
           const paintandquestPreviewButton = document.querySelector("#paintandquest-preview-button");
           const paintandquestVideoWebm = document.querySelector("#mtpl-video-webm");
-
-        //   window.addEventListener("orientationchange", function () {
-        //   console.log("Orientation changed: " + window.orientation);
-  
-        //   const scene = document.querySelector("a-scene");
-        //   const arSystem = scene.systems["mindar-image-system"];
-
-        //   scene.pause(); // Pause rendering
-        //   arSystem.stop(); // Stop 
-        //   if (status === true) {
-        //       paintandquestPreviewButton.setAttribute("visible", true);
-        //       paintandquestVideoWebm.pause();
-        //       status = false;
-        //   }
-
-        //   setTimeout(() => {
-        //   scene.play(); // Resume rendering
-        //   arSystem.start(); // Restart tracking
-        //   if (status === false) {
-        //       if(paintandquestPreviewButton.setAttribute("visible") === false){
-        //         paintandquestVideoWebm.pause();
-        //         paintandquestPreviewButton.setAttribute("visible", true)
-        //       }
-        //       status = true;
-        //     }
-        //   }, 100); // Delay to stabilize after rotation
-        // });
+          const paintandquestVideoLink = document.querySelector("#paintandquest-video-link");
 
           // Video Player
           const testVideo = document.createElement( "video" );
@@ -146,96 +112,39 @@
           // On Target Found
           this.el.addEventListener('targetFound', event => {
             console.log("target found");
-            console.log("target",status);
-            const testVideo = document.createElement( "video" );
-            const canplayWebm = testVideo.canPlayType( 'video/webm; codecs="vp8, opus"' );
-            const paintandquestPreviewButton = document.querySelector("#paintandquest-preview-button");
-            const paintandquestVideoWebm = document.querySelector("#mtpl-video-webm");
-            const paintandquestVideoLink = document.querySelector("#paintandquest-video-link");
-            
             
             // Double checks the video paused, when image target lost and found.
-            // if (status === false) {
-            //   if(paintandquestPreviewButton.getAttribute("visible") === false){
-            //     paintandquestVideoWebm.pause();
-            //     paintandquestPreviewButton.setAttribute("visible", true)
-            //   }
-            //   status = true;
-            // }
-            console.log(status);
-            //showInfo();
+            if (status === false) {
+              if(paintandquestPreviewButton.setAttribute("visible") === false){
+                paintandquestVideoWebm.pause();
+                paintandquestPreviewButton.setAttribute("visible", true)
+              }
+              status = true;
+            }
+        
+            showInfo();
             showPortfolio(() => {
               setTimeout(() => {
                 // next function
               }, 300);
-            });
-
-            // Play/Pause the video on pressing the play button
-            paintandquestPreviewButton.addEventListener('click', () => {
-            console.log("status",status);
-              if(!status) {
-              paintandquestPreviewButton.setAttribute("visible", false);
-
-                if (canplayWebm === "probably" || canplayWebm === "maybe") {
-                  paintandquestVideoLink.setAttribute("src", "#mtpl-video-webm");
-                  paintandquestVideoWebm.play();
-                  status = true;
-                }
-              }
-              else{
-              paintandquestPreviewButton.setAttribute("visible", true);
-            
-                if (canplayWebm === "probably" || canplayWebm === "maybe") {
-                paintandquestVideoLink.setAttribute("src", "#mtpl-video-webm");
-                paintandquestVideoWebm.pause();
-                status = false;
-              }
-            }
             });
           });
 
           // On Target Lost 
           this.el.addEventListener('targetLost', event => {
             console.log("target lost");
-            console.log("target",status);
-            const testVideo = document.createElement( "video" );
-            const canplayWebm = testVideo.canPlayType( 'video/webm; codecs="vp8, opus"' );
-            const paintandquestPreviewButton = document.querySelector("#paintandquest-preview-button");
-            const paintandquestVideoWebm = document.querySelector("#mtpl-video-webm");
-            const paintandquestVideoLink = document.querySelector("#paintandquest-video-link");
-
-            // Pause the video, when image target lost
-            if (status) {
-              paintandquestPreviewButton.setAttribute("visible", true);
             
-                if (canplayWebm === "probably" || canplayWebm === "maybe") {
-                paintandquestVideoLink.setAttribute("src", "#mtpl-video-webm");
-                paintandquestVideoWebm.pause();
-                status = false;
-              }
+            // Pause the video, when image target lost
+            if (status === true) {
+              paintandquestPreviewButton.setAttribute("visible", true);
+              paintandquestVideoWebm.pause();
+              status = false;
             }
-            console.log(status);
+              
           });
         }
       });
     </script>
-
-<!-- <script>
-  window.addEventListener("orientationchange", function () {
-  console.log("Orientation changed: " + window.orientation);
-  
-  const scene = document.querySelector("a-scene");
-  const arSystem = scene.systems["mindar-image-system"];
-
-  scene.pause(); // Pause rendering
-  arSystem.stop(); // Stop tracking
-
-  setTimeout(() => {
-    scene.play(); // Resume rendering
-    arSystem.start(); // Restart tracking
-  }, 100); // Delay to stabilize after rotation
-});
-</script> -->
 
     <style>
       body {
@@ -272,14 +181,6 @@
 	  height: 55vw;
 	}
       }
-
-      @media screen and (orientation: landscape) {
-  #cta-panel {
-    bottom: 10px;
-    left: 50%;
-    transform: translateX(-50%);
-  }
-}
 
   #example-scanning-overlay .inner {
 	display: flex;
@@ -348,7 +249,7 @@
       </div>
     <div>
       <!-- Scene Setup -->
-      <a-scene mindar-image="filterMinCF:0.001; filterBeta: 30; warmupTolerance: 3; missTolerance: 3; imageTargetSrc: target/image.mind; showStats: false; uiScanning: #example-scanning-overlay;" embedded color-space="sRGB" renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: true">
+      <a-scene mindar-image="filterMinCF:0.1; filterBeta: 10; warmupTolerance: 1; missTolerance: 1; imageTargetSrc: target/image.mind; showStats: false; uiScanning: #example-scanning-overlay;" embedded color-space="sRGB" renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false">
         
         <!-- Assets -->
         <a-assets>
@@ -364,7 +265,7 @@
         <a-camera position="0 0 0" look-controls="enabled: false" cursor="fuse: false; rayOrigin: mouse;" raycaster="far: 10000; objects: .clickable"></a-camera>
 
         <!-- Image Target -->
-        <a-entity id="mytarget" mytarget mindar-image-target="targetIndex: 0" position="0 0 -0.5" scale="1.5 1.5 1.5">
+        <a-entity id="mytarget" mytarget mindar-image-target="targetIndex: 0">
 
           <!-- Image Place Holder -->
           <a-plane visible=false src="#card" position="0 0 0.05" height="0.6" width="0.96" rotation="0 0 0"></a-plane>
@@ -375,7 +276,7 @@
               animation__reset="property: scale; to: 1 1 1; dur: 180; easing: easeOutQuad; startEvents: reset">
             <a-entity id="portfolio-item0">
               <a-video id="paintandquest-video-link" webkit-playsinline playsinline width="0.96" height="0.6" position="0 0 0"></a-video>
-              <a-image id="paintandquest-preview-button" class="clickable" src="#icon-play" alpha-test="0.1" position="0 0 0.01" height="0.55" width="0.9"></a-image>
+              <a-image id="paintandquest-preview-button" class="clickable" src="#icon-play" alpha-test="0.2" position="0 0 0.01" height="0.6" width="0.96"></a-image>
             </a-entity>
           </a-entity>
 
