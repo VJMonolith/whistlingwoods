@@ -2,6 +2,8 @@
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
 
     <!-- Mind AR Plugin -->
     <!-- <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
@@ -146,6 +148,13 @@
       });
     </script>
 
+<script>
+  window.addEventListener("orientationchange", function() {
+    console.log("Orientation changed: " + window.orientation);
+    location.reload(); // Reload scene to reset tracking
+  });
+</script>
+
     <style>
       body {
         margin: 0;
@@ -265,7 +274,7 @@
         <a-camera position="0 0 0" look-controls="enabled: false" cursor="fuse: false; rayOrigin: mouse;" raycaster="far: 10000; objects: .clickable"></a-camera>
 
         <!-- Image Target -->
-        <a-entity id="mytarget" mytarget mindar-image-target="targetIndex: 0">
+        <a-entity id="mytarget" mytarget mindar-image-target="targetIndex: 0" position="0 0 -0.5" scale="1.5 1.5 1.5">
 
           <!-- Image Place Holder -->
           <a-plane visible=false src="#card" position="0 0 0.05" height="0.6" width="0.96" rotation="0 0 0"></a-plane>
