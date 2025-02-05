@@ -85,6 +85,14 @@
               paintandquestVideoWebm.play();
             }
           } 
+          else if(paintandquestPreviewButton.getAttribute("visible") === false) {
+            paintandquestPreviewButton.setAttribute("visible", true);
+
+            if (canplayWebm === "probably" || canplayWebm === "maybe") {
+              paintandquestVideoLink.setAttribute("src", "#mtpl-video-webm");
+              paintandquestVideoWebm.pause();
+            }
+          }
           else{
             paintandquestPreviewButton.setAttribute("visible", true);
 
