@@ -269,16 +269,27 @@
     height: 100%;
     width: 100%;
     margin: 0;
-    overflow: hidden;
+    overflow: auto;
   }
 
   .example-container, a-scene {
     height: 100%;
-    width: 102%;
+    width: 100%;
   }
 }
 
-
+@media (orientation: portrait) {
+  body, html {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    overflow: auto;
+  }
+  .example-container, a-scene {
+    height: 100%;
+    width: 100%;
+  }
+}
     </style>
   </head>
   <body>
@@ -293,7 +304,7 @@
       </div>
     <div>
       <!-- Scene Setup -->
-      <a-scene mindar-image="filterMinCF:0.001; filterBeta: 50; warmupTolerance: 5; missTolerance: 5; imageTargetSrc: target/image.mind; showStats: false; uiScanning: #example-scanning-overlay;" embedded color-space="sRGB" renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: true" fullscreen="true">
+      <a-scene mindar-image="filterMinCF:0.001; filterBeta: 50; warmupTolerance: 5; missTolerance: 5; imageTargetSrc: target/image.mind; showStats: false; uiScanning: #example-scanning-overlay;" embedded color-space="sRGB" renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: true">
         
         <!-- Assets -->
         <a-assets>
