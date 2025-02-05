@@ -145,7 +145,7 @@
             
             // Double checks the video paused, when image target lost and found.
             if (status === false) {
-              if(paintandquestPreviewButton.setAttribute("visible") === false){
+              if(paintandquestPreviewButton.getAttribute("visible") === false){
                 paintandquestVideoWebm.pause();
                 paintandquestPreviewButton.setAttribute("visible", true)
               }
