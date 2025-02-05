@@ -25,6 +25,9 @@
         // Video Player
         const testVideo = document.createElement( "video" );
         const canplayWebm = testVideo.canPlayType( 'video/webm; codecs="vp8, opus"' );
+
+        // Video Play/Pause staus
+        var status = true;
         
       var showInfo = () => {
         const downloadButton = document.querySelector("#download-button");
@@ -102,12 +105,10 @@
         
         init: function () {
 
-          // Video Play/Pause staus
-          var status = true;
+          
 
           const paintandquestPreviewButton = document.querySelector("#paintandquest-preview-button");
           const paintandquestVideoWebm = document.querySelector("#mtpl-video-webm");
-          const paintandquestVideoLink = document.querySelector("#paintandquest-video-link");
 
         //   window.addEventListener("orientationchange", function () {
         //   console.log("Orientation changed: " + window.orientation);
