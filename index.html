@@ -108,32 +108,32 @@
           const paintandquestVideoWebm = document.querySelector("#mtpl-video-webm");
           const paintandquestVideoLink = document.querySelector("#paintandquest-video-link");
 
-          window.addEventListener("orientationchange", function () {
-          console.log("Orientation changed: " + window.orientation);
+        //   window.addEventListener("orientationchange", function () {
+        //   console.log("Orientation changed: " + window.orientation);
   
-          const scene = document.querySelector("a-scene");
-          const arSystem = scene.systems["mindar-image-system"];
+        //   const scene = document.querySelector("a-scene");
+        //   const arSystem = scene.systems["mindar-image-system"];
 
-          scene.pause(); // Pause rendering
-          arSystem.stop(); // Stop 
-          if (status === true) {
-              paintandquestPreviewButton.setAttribute("visible", true);
-              paintandquestVideoWebm.pause();
-              status = false;
-          }
+        //   scene.pause(); // Pause rendering
+        //   arSystem.stop(); // Stop 
+        //   if (status === true) {
+        //       paintandquestPreviewButton.setAttribute("visible", true);
+        //       paintandquestVideoWebm.pause();
+        //       status = false;
+        //   }
 
-          setTimeout(() => {
-          scene.play(); // Resume rendering
-          arSystem.start(); // Restart tracking
-          if (status === false) {
-              if(paintandquestPreviewButton.setAttribute("visible") === false){
-                paintandquestVideoWebm.pause();
-                paintandquestPreviewButton.setAttribute("visible", true)
-              }
-              status = true;
-            }
-          }, 100); // Delay to stabilize after rotation
-        });
+        //   setTimeout(() => {
+        //   scene.play(); // Resume rendering
+        //   arSystem.start(); // Restart tracking
+        //   if (status === false) {
+        //       if(paintandquestPreviewButton.setAttribute("visible") === false){
+        //         paintandquestVideoWebm.pause();
+        //         paintandquestPreviewButton.setAttribute("visible", true)
+        //       }
+        //       status = true;
+        //     }
+        //   }, 100); // Delay to stabilize after rotation
+        // });
 
           // Video Player
           const testVideo = document.createElement( "video" );
