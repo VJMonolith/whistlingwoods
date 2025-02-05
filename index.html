@@ -193,11 +193,14 @@
 </script> -->
 
 <script>
-  window.addEventListener("orientationchange", function () {
+  window.addEventListener("orientationchange", function() {
+  console.log("Orientation changed: " + window.orientation);
+  
   const scene = document.querySelector("a-scene");
-  scene.pause();
+  
+  scene.pause(); // Temporarily pause scene
   setTimeout(() => {
-    scene.play();
+    scene.play(); // Resume after orientation change
   }, 500);
 });
 </script>
