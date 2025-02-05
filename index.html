@@ -193,16 +193,38 @@
 </script> -->
 
 <script>
-  window.addEventListener("orientationchange", function() {
-  console.log("Orientation changed: " + window.orientation);
+//   window.addEventListener("orientationchange", function() {
+//   console.log("Orientation changed: " + window.orientation);
   
-  const scene = document.querySelector("a-scene");
+//   const scene = document.querySelector("a-scene");
   
-  scene.pause(); // Temporarily pause scene
-  setTimeout(() => {
-    scene.play(); // Resume after orientation change
-  }, 500);
-});
+//   scene.pause(); // Temporarily pause scene
+//   setTimeout(() => {
+//     scene.play(); // Resume after orientation change
+//   }, 500);
+// });
+
+function adjustForOrientation() {
+  const camera = document.querySelector("a-camera");
+
+  if (window.innerWidth > window.innerHeight) {
+    // Landscape Mode
+    camera.setAttribute("position", "0 0 1");
+    console.log("Switched to landscape mode");
+  } else {
+    // Portrait Mode
+    camera.setAttribute("position", "0 0 0");
+    console.log("Switched to portrait mode");
+  }
+}
+
+// Detect orientation change
+window.addEventListener("orientationchange", adjustForOrientation);
+window.addEventListener("resize", adjustForOrientation);
+
+// Run once on page load
+window.onload = adjustForOrientation;
+
 </script>
 
 
