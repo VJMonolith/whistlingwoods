@@ -143,15 +143,17 @@
           // On Target Found
           this.el.addEventListener('targetFound', event => {
             console.log("target found");
+            paintandquestPreviewButton.setAttribute("visible", false);
+            paintandquestVideoWebm.play();
             
             // Double checks the video paused, when image target lost and found.
-            if (status === false) {
-              if(paintandquestPreviewButton.getAttribute("visible") === false){
-                paintandquestVideoWebm.pause();
-                paintandquestPreviewButton.setAttribute("visible", true)
-              }
-              status = true;
-            }
+            // if (status === false) {
+            //   if(paintandquestPreviewButton.getAttribute("visible") === false){
+            //     paintandquestVideoWebm.pause();
+            //     paintandquestPreviewButton.setAttribute("visible", true)
+            //   }
+            //   status = true;
+            // }
         
             showInfo();
             showPortfolio(() => {
@@ -164,13 +166,14 @@
           // On Target Lost 
           this.el.addEventListener('targetLost', event => {
             console.log("target lost");
-            
+            paintandquestPreviewButton.setAttribute("visible", true);
+            paintandquestVideoWebm.pause();
             // Pause the video, when image target lost
-            if (status === true) {
-              paintandquestPreviewButton.setAttribute("visible", true);
-              paintandquestVideoWebm.pause();
-              status = false;
-            }
+            // if (status === true) {
+            //   paintandquestPreviewButton.setAttribute("visible", true);
+            //   paintandquestVideoWebm.pause();
+            //   status = false;
+            // }
               
           });
         }
