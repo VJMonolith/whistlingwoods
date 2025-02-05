@@ -27,30 +27,30 @@
         const canplayWebm = testVideo.canPlayType( 'video/webm; codecs="vp8, opus"' );
 
         // Video Play/Pause staus
-        let status = true;
+        let status = false;
         
-      var showInfo = () => {
-        const downloadButton = document.querySelector("#download-button");
-        const cta = document.querySelector("#cta-panel");
+      // var showInfo = () => {
+      //   const downloadButton = document.querySelector("#download-button");
+      //   const cta = document.querySelector("#cta-panel");
 
-        const showCtaItem = (item) => {
-            document.querySelector("#cta-item" + item).setAttribute("visible", 0 === item);
-        }
+      //   const showCtaItem = (item) => {
+      //       document.querySelector("#cta-item" + item).setAttribute("visible", 0 === item);
+      //   }
         
-        showCtaItem(0)
+      //   showCtaItem(0)
 
-        setTimeout(() => { // Delay the animation
-          cta.setAttribute("visible", true); // Make the CTA Button visible
-          cta.emit('pop'); // Start the pop-out animation
-          setTimeout(() => {
-            cta.emit('reset'); // Reset to normal size
-          }, 180); // Reset after pop animation duration
-        }, 250); // Delay of 250 milliseconds
+      //   setTimeout(() => { // Delay the animation
+      //     cta.setAttribute("visible", true); // Make the CTA Button visible
+      //     cta.emit('pop'); // Start the pop-out animation
+      //     setTimeout(() => {
+      //       cta.emit('reset'); // Reset to normal size
+      //     }, 180); // Reset after pop animation duration
+      //   }, 250); // Delay of 250 milliseconds
 
-        downloadButton.addEventListener('click', function (evt) {
-          window.location.href="https://monolith.asia";
-        });       
-      }
+      //   downloadButton.addEventListener('click', function (evt) {
+      //     window.location.href="https://monolith.asia";
+      //   });       
+      // }
 
       const showPortfolio = () => {
         const portfolio = document.querySelector("#portfolio-panel");
@@ -72,32 +72,34 @@
           }, 180); // Reset after pop animation duration
         }, 250); // Delay of 250 milliseconds
         
-        if (portfolio.getAttribute("visible", true)) {
-          paintandquestVideoLink.getAttribute("src");
-          paintandquestVideoWebm.play();
-          paintandquestVideoWebm.pause();
-        }
+        // if (portfolio.getAttribute("visible", true)) {
+        //   paintandquestVideoLink.getAttribute("src");
+        //   paintandquestVideoWebm.play();
+        //   paintandquestVideoWebm.pause();
+        // }
 
         // Play/Pause the video on pressing the play button
-        paintandquestPreviewButton.addEventListener('click', () => {
-          let isVisible = paintandquestPreviewButton.getAttribute("visible");
-          if(isVisible) {
-            paintandquestPreviewButton.setAttribute("visible", false);
+        // paintandquestPreviewButton.addEventListener('click', () => {
+        //   console.log("status",status);
+        //   if(!status) {
+        //     paintandquestPreviewButton.setAttribute("visible", false);
 
-            if (canplayWebm === "probably" || canplayWebm === "maybe") {
-              paintandquestVideoLink.setAttribute("src", "#mtpl-video-webm");
-              paintandquestVideoWebm.play();
-            }
-          }
-          else{
-            paintandquestPreviewButton.setAttribute("visible", true);
-
-            if (canplayWebm === "probably" || canplayWebm === "maybe") {
-              paintandquestVideoLink.setAttribute("src", "#mtpl-video-webm");
-              paintandquestVideoWebm.pause();
-            }
-          }
-        });
+        //     if (canplayWebm === "probably" || canplayWebm === "maybe") {
+        //       paintandquestVideoLink.setAttribute("src", "#mtpl-video-webm");
+        //       paintandquestVideoWebm.play();
+        //       status = true;
+        //     }
+        //   }
+        //   else{
+        //     paintandquestPreviewButton.setAttribute("visible", true);
+            
+        //     if (canplayWebm === "probably" || canplayWebm === "maybe") {
+        //       paintandquestVideoLink.setAttribute("src", "#mtpl-video-webm");
+        //       paintandquestVideoWebm.pause();
+        //       status = false;
+        //     }
+        //   }
+        // });
       }
 
       // AR Config
@@ -144,34 +146,73 @@
           // On Target Found
           this.el.addEventListener('targetFound', event => {
             console.log("target found");
-            console.log(status);
+            console.log("target",status);
+            const testVideo = document.createElement( "video" );
+            const canplayWebm = testVideo.canPlayType( 'video/webm; codecs="vp8, opus"' );
+            const paintandquestPreviewButton = document.querySelector("#paintandquest-preview-button");
+            const paintandquestVideoWebm = document.querySelector("#mtpl-video-webm");
+            const paintandquestVideoLink = document.querySelector("#paintandquest-video-link");
+            
             
             // Double checks the video paused, when image target lost and found.
-            if (status === false) {
-              if(paintandquestPreviewButton.getAttribute("visible") === false){
-                paintandquestVideoWebm.pause();
-                paintandquestPreviewButton.setAttribute("visible", true)
-              }
-              status = true;
-            }
+            // if (status === false) {
+            //   if(paintandquestPreviewButton.getAttribute("visible") === false){
+            //     paintandquestVideoWebm.pause();
+            //     paintandquestPreviewButton.setAttribute("visible", true)
+            //   }
+            //   status = true;
+            // }
             console.log(status);
-            showInfo();
+            //showInfo();
             showPortfolio(() => {
               setTimeout(() => {
                 // next function
               }, 300);
+            });
+
+            // Play/Pause the video on pressing the play button
+            paintandquestPreviewButton.addEventListener('click', () => {
+            console.log("status",status);
+              if(!status) {
+              paintandquestPreviewButton.setAttribute("visible", false);
+
+                if (canplayWebm === "probably" || canplayWebm === "maybe") {
+                  paintandquestVideoLink.setAttribute("src", "#mtpl-video-webm");
+                  paintandquestVideoWebm.play();
+                  status = true;
+                }
+              }
+              else{
+              paintandquestPreviewButton.setAttribute("visible", true);
+            
+                if (canplayWebm === "probably" || canplayWebm === "maybe") {
+                paintandquestVideoLink.setAttribute("src", "#mtpl-video-webm");
+                paintandquestVideoWebm.pause();
+                status = false;
+              }
+            }
             });
           });
 
           // On Target Lost 
           this.el.addEventListener('targetLost', event => {
             console.log("target lost");
-            console.log(status);
+            console.log("target",status);
+            const testVideo = document.createElement( "video" );
+            const canplayWebm = testVideo.canPlayType( 'video/webm; codecs="vp8, opus"' );
+            const paintandquestPreviewButton = document.querySelector("#paintandquest-preview-button");
+            const paintandquestVideoWebm = document.querySelector("#mtpl-video-webm");
+            const paintandquestVideoLink = document.querySelector("#paintandquest-video-link");
+
             // Pause the video, when image target lost
-            if (status === true) {
+            if (status) {
               paintandquestPreviewButton.setAttribute("visible", true);
-              paintandquestVideoWebm.pause();
-              status = false;
+            
+                if (canplayWebm === "probably" || canplayWebm === "maybe") {
+                paintandquestVideoLink.setAttribute("src", "#mtpl-video-webm");
+                paintandquestVideoWebm.pause();
+                status = false;
+              }
             }
             console.log(status);
           });
