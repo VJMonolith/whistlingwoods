@@ -1,6 +1,6 @@
 <html>
   <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1" /> -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -107,6 +107,33 @@
           const paintandquestVideoWebm = document.querySelector("#mtpl-video-webm");
           const paintandquestVideoLink = document.querySelector("#paintandquest-video-link");
 
+          window.addEventListener("orientationchange", function () {
+          console.log("Orientation changed: " + window.orientation);
+  
+          const scene = document.querySelector("a-scene");
+          const arSystem = scene.systems["mindar-image-system"];
+
+          scene.pause(); // Pause rendering
+          arSystem.stop(); // Stop 
+          if (status === true) {
+              paintandquestPreviewButton.setAttribute("visible", true);
+              paintandquestVideoWebm.pause();
+              status = false;
+          }
+
+          setTimeout(() => {
+          scene.play(); // Resume rendering
+          arSystem.start(); // Restart tracking
+          if (status === false) {
+              if(paintandquestPreviewButton.setAttribute("visible") === false){
+                paintandquestVideoWebm.pause();
+                paintandquestPreviewButton.setAttribute("visible", true)
+              }
+              status = true;
+            }
+          }, 100); // Delay to stabilize after rotation
+        });
+
           // Video Player
           const testVideo = document.createElement( "video" );
           const canplayWebm = testVideo.canPlayType( 'video/webm; codecs="vp8, opus"' );
@@ -148,50 +175,6 @@
       });
     </script>
 
-<!-- <script>
-  window.addEventListener("orientationchange", function() {
-    console.log("Orientation changed: " + window.orientation);
-    location.reload(); // Reload scene to reset tracking
-  });
-</script> -->
-
-<!-- <script>
-  function adjustForOrientation() {
-    const camera = document.querySelector("a-camera");
-    const scene = document.querySelector("a-scene");
-
-    if (window.innerWidth > window.innerHeight) {
-      // Landscape Mode
-      camera.setAttribute("position", "0 0 1");
-      scene.setAttribute("renderer", "antialias: true; logarithmicDepthBuffer: true");
-      console.log("Switched to landscape mode");
-    } else {
-      // Portrait Mode
-      camera.setAttribute("position", "0 0 0");
-      console.log("Switched to portrait mode");
-    }
-  }
-
-  // Detect when the screen rotates
-  window.addEventListener("orientationchange", adjustForOrientation);
-  window.addEventListener("resize", adjustForOrientation);
-
-  // Run once when the page loads
-  window.onload = adjustForOrientation;
-</script>
-
-<script>
-  document.addEventListener("DOMContentLoaded", () => {
-    const scene = document.querySelector("a-scene");
-    
-    scene.addEventListener("loaded", () => {
-      if (document.documentElement.requestFullscreen) {
-        document.documentElement.requestFullscreen();
-      }
-    });
-  });
-</script> -->
-
 <script>
   window.addEventListener("orientationchange", function () {
   console.log("Orientation changed: " + window.orientation);
@@ -208,9 +191,6 @@
   }, 100); // Delay to stabilize after rotation
 });
 </script>
-
-
-
 
     <style>
       body {
