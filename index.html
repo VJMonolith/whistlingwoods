@@ -84,7 +84,8 @@
               paintandquestVideoLink.setAttribute("src", "#mtpl-video-webm");
               paintandquestVideoWebm.play();
             }
-          } else {
+          } 
+          else if(paintandquestPreviewButton.getAttribute("visible") === false) {
             paintandquestPreviewButton.setAttribute("visible", true);
 
             if (canplayWebm === "probably" || canplayWebm === "maybe") {
