@@ -157,19 +157,22 @@
 
 <script>
   function adjustForOrientation() {
+    const camera = document.querySelector("a-camera");
+    const scene = document.querySelector("a-scene");
+
     if (window.innerWidth > window.innerHeight) {
       // Landscape Mode
-      document.querySelector("a-camera").setAttribute("position", "0 0 1");
-      document.querySelector("a-scene").setAttribute("renderer", "antialias: true; logarithmicDepthBuffer: true");
+      camera.setAttribute("position", "0 0 1");
+      scene.setAttribute("renderer", "antialias: true; logarithmicDepthBuffer: true");
       console.log("Switched to landscape mode");
     } else {
       // Portrait Mode
-      document.querySelector("a-camera").setAttribute("position", "0 0 0");
+      camera.setAttribute("position", "0 0 0");
       console.log("Switched to portrait mode");
     }
   }
 
-  // Listen for orientation changes
+  // Detect when the screen rotates
   window.addEventListener("orientationchange", adjustForOrientation);
   window.addEventListener("resize", adjustForOrientation);
 
@@ -188,6 +191,7 @@
     });
   });
 </script>
+
 
 
 
