@@ -200,12 +200,12 @@
   const arSystem = scene.systems["mindar-image-system"];
 
   scene.pause(); // Pause rendering
-  arSystem.stop(); // Stop tracking
+  //arSystem.stop(); // Stop tracking
 
   setTimeout(() => {
     scene.play(); // Resume rendering
-    arSystem.start(); // Restart tracking
-  }, 1000); // Delay to stabilize after rotation
+    //arSystem.start(); // Restart tracking
+  }, 500); // Delay to stabilize after rotation
 });
 </script>
 
