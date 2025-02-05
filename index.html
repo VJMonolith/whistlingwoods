@@ -148,12 +148,48 @@
       });
     </script>
 
-<script>
+<!-- <script>
   window.addEventListener("orientationchange", function() {
     console.log("Orientation changed: " + window.orientation);
     location.reload(); // Reload scene to reset tracking
   });
+</script> -->
+
+<script>
+  function adjustForOrientation() {
+    if (window.innerWidth > window.innerHeight) {
+      // Landscape Mode
+      document.querySelector("a-camera").setAttribute("position", "0 0 1");
+      document.querySelector("a-scene").setAttribute("renderer", "antialias: true; logarithmicDepthBuffer: true");
+      console.log("Switched to landscape mode");
+    } else {
+      // Portrait Mode
+      document.querySelector("a-camera").setAttribute("position", "0 0 0");
+      console.log("Switched to portrait mode");
+    }
+  }
+
+  // Listen for orientation changes
+  window.addEventListener("orientationchange", adjustForOrientation);
+  window.addEventListener("resize", adjustForOrientation);
+
+  // Run once when the page loads
+  window.onload = adjustForOrientation;
 </script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const scene = document.querySelector("a-scene");
+    
+    scene.addEventListener("loaded", () => {
+      if (document.documentElement.requestFullscreen) {
+        document.documentElement.requestFullscreen();
+      }
+    });
+  });
+</script>
+
+
 
     <style>
       body {
@@ -190,6 +226,14 @@
 	  height: 55vw;
 	}
       }
+
+      @media screen and (orientation: landscape) {
+  #cta-panel {
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}
 
   #example-scanning-overlay .inner {
 	display: flex;
@@ -258,7 +302,7 @@
       </div>
     <div>
       <!-- Scene Setup -->
-      <a-scene mindar-image="filterMinCF:0.1; filterBeta: 10; warmupTolerance: 1; missTolerance: 1; imageTargetSrc: target/image.mind; showStats: false; uiScanning: #example-scanning-overlay;" embedded color-space="sRGB" renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: true">
+      <a-scene mindar-image="filterMinCF:0.01; filterBeta: 50; warmupTolerance: 5; missTolerance: 5; imageTargetSrc: target/image.mind; showStats: false; uiScanning: #example-scanning-overlay;" embedded color-space="sRGB" renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: true">
         
         <!-- Assets -->
         <a-assets>
