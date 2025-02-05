@@ -22,7 +22,10 @@
     <script>
         // Video Player
         const testVideo = document.createElement( "video" );
-        const canplayWebm = testVideo.canPlayType( 'video/webm; codecs="vp8, opus"' );
+        // Check if the browser supports WebM format
+        // canplayWebm = testVideo.canPlayType( 'video/webm; codecs="vp8, opus"' );
+        // Check if the browser supports MP4 format
+        const canplayWebm = testVideo.canPlayType('video/mp4; codecs="avc1.42E01E, mp4a.40.2"');
         
       var showInfo = () => {
         const downloadButton = document.querySelector("#download-button");
@@ -50,7 +53,7 @@
       const showPortfolio = () => {
         const portfolio = document.querySelector("#portfolio-panel");
         const paintandquestPreviewButton = document.querySelector("#paintandquest-preview-button");
-        const paintandquestVideoWebm = document.querySelector("#mtpl-video-webm");
+        const paintandquestVideoWebm = document.querySelector("#mtpl-video-mp4");
         const paintandquestVideoLink = document.querySelector("#paintandquest-video-link");
 
         const showPortfolioItem = (item) => {
@@ -79,14 +82,14 @@
             paintandquestPreviewButton.setAttribute("visible", false);
 
             if (canplayWebm === "probably" || canplayWebm === "maybe") {
-              paintandquestVideoLink.setAttribute("src", "#mtpl-video-webm");
+              paintandquestVideoLink.setAttribute("src", "#mtpl-video-mp4");
               paintandquestVideoWebm.play();
             }
           } else {
             paintandquestPreviewButton.setAttribute("visible", true);
 
             if (canplayWebm === "probably" || canplayWebm === "maybe") {
-              paintandquestVideoLink.setAttribute("src", "#mtpl-video-webm");
+              paintandquestVideoLink.setAttribute("src", "#mtpl-video-mp4");
               paintandquestVideoWebm.pause();
             }
           }
@@ -102,7 +105,7 @@
           let status = true;
 
           const paintandquestPreviewButton = document.querySelector("#paintandquest-preview-button");
-          const paintandquestVideoWebm = document.querySelector("#mtpl-video-webm");
+          const paintandquestVideoWebm = document.querySelector("#mtpl-video-mp4");
           const paintandquestVideoLink = document.querySelector("#paintandquest-video-link");
 
           window.addEventListener("orientationchange", function () {
@@ -135,7 +138,8 @@
 
           // Video Player
           const testVideo = document.createElement( "video" );
-          const canplayWebm = testVideo.canPlayType( 'video/webm; codecs="vp8, opus"' );
+          //const canplayWebm = testVideo.canPlayType( 'video/webm; codecs="vp8, opus"' );
+          const canplayWebm = testVideo.canPlayType('video/mp4; codecs="avc1.42E01E, mp4a.40.2"');
           
           // On Target Found
           this.el.addEventListener('targetFound', event => {
@@ -315,6 +319,7 @@
           <img id="icon-download" src="img\download.png" />
           <img id="icon-logo" src="img\logo.png" />
           <video id="mtpl-video-webm" autoplay="false" loop="true" src="video/video.webm"></video>
+          <video id="mtpl-video-mp4" autoplay="false" loop="true" src="video/video.mp4"></video>
           
         </a-assets>
 
