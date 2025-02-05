@@ -27,7 +27,7 @@
         const canplayWebm = testVideo.canPlayType( 'video/webm; codecs="vp8, opus"' );
 
         // Video Play/Pause staus
-        var status = true;
+        let status = true;
         
       var showInfo = () => {
         const downloadButton = document.querySelector("#download-button");
@@ -144,6 +144,7 @@
           // On Target Found
           this.el.addEventListener('targetFound', event => {
             console.log("target found");
+            console.log(status);
             
             // Double checks the video paused, when image target lost and found.
             if (status === false) {
@@ -153,7 +154,7 @@
               }
               status = true;
             }
-        
+            console.log(status);
             showInfo();
             showPortfolio(() => {
               setTimeout(() => {
@@ -165,13 +166,14 @@
           // On Target Lost 
           this.el.addEventListener('targetLost', event => {
             console.log("target lost");
+            console.log(status);
             // Pause the video, when image target lost
             if (status === true) {
               paintandquestPreviewButton.setAttribute("visible", true);
               paintandquestVideoWebm.pause();
               status = false;
             }
-              
+            console.log(status);
           });
         }
       });
