@@ -77,20 +77,13 @@
 
         // Play/Pause the video on pressing the play button
         paintandquestPreviewButton.addEventListener('click', () => {
-          if(paintandquestPreviewButton.getAttribute("visible") === true) {
+          let isVisible = paintandquestPreviewButton.getAttribute("visible");
+          if(isVisible) {
             paintandquestPreviewButton.setAttribute("visible", false);
 
             if (canplayWebm === "probably" || canplayWebm === "maybe") {
               paintandquestVideoLink.setAttribute("src", "#mtpl-video-webm");
               paintandquestVideoWebm.play();
-            }
-          } 
-          else if(paintandquestPreviewButton.getAttribute("visible") === false) {
-            paintandquestPreviewButton.setAttribute("visible", true);
-
-            if (canplayWebm === "probably" || canplayWebm === "maybe") {
-              paintandquestVideoLink.setAttribute("src", "#mtpl-video-webm");
-              paintandquestVideoWebm.pause();
             }
           }
           else{
