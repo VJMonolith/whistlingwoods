@@ -12,3 +12,17 @@ Codec: Opus
 Bitrate: 160
 Mix: Stereo
 Samplerate: 44.1
+
+Video:
+Format - mp4
+Codec - H.264 (x264)
+Fps - 30
+Resolution - 1280x720
+Ratio - 16:9
+
+Audio:
+Codec: AAC
+Bitrate: 160 (128-256)
+Mix: Stereo
+Samplerate: 44.1
+

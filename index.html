@@ -21,15 +21,17 @@
 
     <script>
         // Video Player
-        const testVideo = document.createElement( "video" );
-        // Check if the browser supports WebM format
-        // canplayWebm = testVideo.canPlayType( 'video/webm; codecs="vp8, opus"' );
+        const videoPlayer = document.createElement( "video" );
         // Check if the browser supports MP4 format
-        const canplayWebm = testVideo.canPlayType('video/mp4; codecs="avc1.42E01E, mp4a.40.2"');
+        const canPlayMP4 = videoPlayer.canPlayType( 'video/mp4; codecs="avc1.42E01E, mp4a.40.2"' );
+        // Check if the browser supports WebM format        
+        const canPlayWebm = videoPlayer.canPlayType( 'video/webm; codecs="vp8, opus"' );    
+        // Video Play/Pause staus
+        let status = false;   
         
-      var showInfo = () => {
+      var showCta = () => {
         const downloadButton = document.querySelector("#download-button");
-        const cta = document.querySelector("#cta-panel");
+        const ctaPanel = document.querySelector("#cta-panel");
 
         const showCtaItem = (item) => {
             document.querySelector("#cta-item" + item).setAttribute("visible", 0 === item);
@@ -38,10 +40,10 @@
         showCtaItem(0)
 
         setTimeout(() => { // Delay the animation
-          cta.setAttribute("visible", true); // Make the CTA Button visible
-          cta.emit('pop'); // Start the pop-out animation
+          ctaPanel.setAttribute("visible", true); // Make the CTA Button visible
+          ctaPanel.emit('pop'); // Start the pop-out animation
           setTimeout(() => {
-            cta.emit('reset'); // Reset to normal size
+            ctaPanel.emit('reset'); // Reset to normal size
           }, 180); // Reset after pop animation duration
         }, 250); // Delay of 250 milliseconds
 
@@ -50,47 +52,57 @@
         });       
       }
 
-      const showPortfolio = () => {
-        const portfolio = document.querySelector("#portfolio-panel");
-        const paintandquestPreviewButton = document.querySelector("#paintandquest-preview-button");
-        const paintandquestVideoWebm = document.querySelector("#mtpl-video-mp4");
-        const paintandquestVideoLink = document.querySelector("#paintandquest-video-link");
+      const showMedia = () => {
+        const mediaPanel = document.querySelector("#media-panel");
+        const playButton = document.querySelector("#play-button");
+        const videoMP4 = document.querySelector("#video-mp4");
+        const videoWebM = document.querySelector("#video-webm");
+        const videoLink = document.querySelector("#video-link");
 
-        const showPortfolioItem = (item) => {
-          document.querySelector("#portfolio-item" + item).setAttribute("visible", 0 === item);
+        const showMediaItem = (item) => {
+          document.querySelector("#media-item" + item).setAttribute("visible", 0 === item);
         }
 
-        showPortfolioItem(0) 
+        showMediaItem(0) 
 
         setTimeout(() => { // Delay the animation
-          portfolio.setAttribute("visible", true); // Make the media player visible
-          portfolio.emit('pop'); // Start the pop-out animation
+          mediaPanel.setAttribute("visible", true); // Make the media player visible
+          mediaPanel.emit('pop'); // Start the pop-out animation
           setTimeout(() => {
-            portfolio.emit('reset'); // Reset to normal size
+            mediaPanel.emit('reset'); // Reset to normal size
           }, 180); // Reset after pop animation duration
         }, 250); // Delay of 250 milliseconds
         
-        if (portfolio.getAttribute("visible", true)) {
-          paintandquestVideoLink.getAttribute("src");
-          paintandquestVideoWebm.play();
-          paintandquestVideoWebm.pause();
+        if (mediaPanel.getAttribute("visible", true)) {
+          videoLink.getAttribute("src");
+          //videoMP4.play();
+          //videoMP4.pause();
         }
-
+        console.log("status", status);
         // Play/Pause the video on pressing the play button
-        paintandquestPreviewButton.addEventListener('click', () => {
-          if(paintandquestPreviewButton.getAttribute("visible") === true) {
-            paintandquestPreviewButton.setAttribute("visible", false);
-
-            if (canplayWebm === "probably" || canplayWebm === "maybe") {
-              paintandquestVideoLink.setAttribute("src", "#mtpl-video-mp4");
-              paintandquestVideoWebm.play();
+        playButton.addEventListener('click', () => {
+          if(!status) {
+            playButton.setAttribute("visible", false);  
+            status = true;
+            console.log("status", status);
+            if (canPlayMP4 === "probably" || canPlayMP4 === "maybe") {
+              videoLink.setAttribute("src", "#video-mp4");
+              videoMP4.play();
             }
-          } else {
-            paintandquestPreviewButton.setAttribute("visible", true);
-
-            if (canplayWebm === "probably" || canplayWebm === "maybe") {
-              paintandquestVideoLink.setAttribute("src", "#mtpl-video-mp4");
-              paintandquestVideoWebm.pause();
+            else{
+              videoLink.setAttribute("src", "#video-webm");
+              videoWebM.play();
+            }
+          } else if (status) {
+            playButton.setAttribute("visible", true);
+            status = false;
+            if (canPlayMP4 === "probably" || canPlayMP4 === "maybe") {
+              videoLink.setAttribute("src", "#video-mp4");
+              videoMP4.pause();
+            }
+            else{
+              videoLink.setAttribute("src", "#video-webm");
+              videoWebM.pause();
             }
           }
         });
@@ -101,12 +113,12 @@
         
         init: function () {
 
-          // Video Play/Pause staus
-          let status = true;
+          
 
-          const paintandquestPreviewButton = document.querySelector("#paintandquest-preview-button");
-          const paintandquestVideoWebm = document.querySelector("#mtpl-video-mp4");
-          const paintandquestVideoLink = document.querySelector("#paintandquest-video-link");
+          const playButton = document.querySelector("#play-button");
+          const videoMP4 = document.querySelector("#video-mp4");
+          const videoWebM = document.querySelector("#video-webm");
+          const videoLink = document.querySelector("#video-link");
 
           window.addEventListener("orientationchange", function () {
           console.log("Orientation changed: " + window.orientation);
@@ -117,45 +129,62 @@
           scene.pause(); // Pause rendering
           arSystem.stop(); // Stop 
           if (status === true) {
-              paintandquestPreviewButton.setAttribute("visible", true);
-              paintandquestVideoWebm.pause();
-              status = false;
+            if (canPlayMP4 === "probably" || canPlayMP4 === "maybe") {
+              videoLink.setAttribute("src", "#video-mp4");
+              videoMP4.pause();
+            }
+            else{
+              videoLink.setAttribute("src", "#video-webm");
+              videoWebM.pause();
+            }
+            playButton.setAttribute("visible", true);
+            status = false;
           }
 
           setTimeout(() => {
-          scene.play(); // Resume rendering
-          arSystem.start(); // Restart tracking
-          if (status === false) {
-              if(paintandquestPreviewButton.setAttribute("visible") === false){
-                paintandquestVideoWebm.pause();
-                paintandquestPreviewButton.setAttribute("visible", true)
-              }
-              status = true;
-            }
+            scene.play(); // Resume rendering
+            arSystem.start(); // Restart tracking
+            // if (status === false) {
+            //   if (canPlayMP4 === "probably" || canPlayMP4 === "maybe") {
+            //     videoLink.setAttribute("src", "#video-mp4");
+            //     videoMP4.pause();
+            //   }
+            //   else{
+            //     videoLink.setAttribute("src", "#video-webm");
+            //     videoWebM.pause();
+            //   }
+            //   playButton.setAttribute("visible", true)
+            //   status = true;
+            // }
           }, 100); // Delay to stabilize after rotation
         });
 
 
           // Video Player
-          const testVideo = document.createElement( "video" );
-          //const canplayWebm = testVideo.canPlayType( 'video/webm; codecs="vp8, opus"' );
-          const canplayWebm = testVideo.canPlayType('video/mp4; codecs="avc1.42E01E, mp4a.40.2"');
+          const videoPlayer = document.createElement( "video" );
+          const canPlayMP4 = videoPlayer.canPlayType( 'video/mp4; codecs="avc1.42E01E, mp4a.40.2"' );
+          const canPlayWebm = videoPlayer.canPlayType( 'video/webm; codecs="vp8, opus"' ); 
           
           // On Target Found
           this.el.addEventListener('targetFound', event => {
             console.log("target found");
-            
+            console.log("target found", status);
             // Double checks the video paused, when image target lost and found.
-            if (status === false) {
-              if(paintandquestPreviewButton.setAttribute("visible") === false){
-                paintandquestVideoWebm.pause();
-                paintandquestPreviewButton.setAttribute("visible", true)
-              }
-              status = true;
-            }
+            // if (status === false) {
+            //   if (canPlayMP4 === "probably" || canPlayMP4 === "maybe") {
+            //     videoLink.setAttribute("src", "#video-mp4");
+            //     videoMP4.pause();
+            //   }
+            //   else{
+            //     videoLink.setAttribute("src", "#video-webm");
+            //     videoWebM.pause();
+            //   }
+            //   playButton.setAttribute("visible", true)
+            //   status = true;
+            // }
         
-            showInfo();
-            showPortfolio(() => {
+            showCta();
+            showMedia(() => {
               setTimeout(() => {
                 // next function
               }, 300);
@@ -165,11 +194,18 @@
           // On Target Lost 
           this.el.addEventListener('targetLost', event => {
             console.log("target lost");
-            
+            console.log("target lost", status);
             // Pause the video, when image target lost
             if (status === true) {
-              paintandquestPreviewButton.setAttribute("visible", true);
-              paintandquestVideoWebm.pause();
+              if (canPlayMP4 === "probably" || canPlayMP4 === "maybe") {
+                videoLink.setAttribute("src", "#video-mp4");
+                videoMP4.pause();
+              }
+              else{
+                videoLink.setAttribute("src", "#video-webm");
+                videoWebM.pause();
+              }
+              playButton.setAttribute("visible", true);
               status = false;
             }
               
@@ -267,35 +303,6 @@
       max-width: 300px; /* Limit the image size */
       height: auto;
     }
-
-    /* @media (orientation: landscape) {
-  body, html {
-    height: 100%;
-    width: 100%;
-    margin: 0;
-    overflow: auto;
-  }
-
-  .example-container, a-scene {
-    height: 100%;
-    width: 100%;
-  }
-}
-
-@media (orientation: portrait) {
-  body, html {
-    height: 100%;
-    width: 100%;
-    margin: 0;
-    overflow: auto;
-  }
-  .example-container, a-scene {
-    height: 100%;
-    width: 100%;
-  }
-} */
-
-
     </style>
   </head>
   <body>
@@ -318,8 +325,8 @@
           <img id="icon-play" src="img\playIcon.png" />
           <img id="icon-download" src="img\download.png" />
           <img id="icon-logo" src="img\logo.png" />
-          <video id="mtpl-video-webm" autoplay="false" loop="true" src="video/video.webm"></video>
-          <video id="mtpl-video-mp4" autoplay="false" loop="true" src="video/video.mp4"></video>
+          <video id="video-mp4" autoplay="false" loop="true" src="video/video.mp4"></video>
+          <video id="video-webm" autoplay="false" loop="true" src="video/video.webm"></video>
           
         </a-assets>
 
@@ -333,12 +340,12 @@
           <a-plane visible=false src="#card" position="0 0 0.05" height="0.6" width="0.96" rotation="0 0 0"></a-plane>
 
           <!-- Media Player -->
-          <a-entity visible=false id="portfolio-panel" position="-0.002 0 0.08"
+          <a-entity visible=false id="media-panel" position="-0.002 0 0.08"
               animation__pop="property: scale; from: 0 1 1; to: 1.2 1 1; dur: 180; easing: easeOutQuad; startEvents: pop"
               animation__reset="property: scale; to: 1 1 1; dur: 180; easing: easeOutQuad; startEvents: reset">
-            <a-entity id="portfolio-item0">
-              <a-video id="paintandquest-video-link" webkit-playsinline playsinline width="0.96" height="0.6" position="0 0 0"></a-video>
-              <a-image id="paintandquest-preview-button" class="clickable" src="#icon-play" alpha-test="0.2" position="0 0 0.01" height="0.6" width="0.96"></a-image>
+            <a-entity id="media-item0">
+              <a-video id="video-link" webkit-playsinline playsinline width="0.96" height="0.6" position="0 0 0"></a-video>
+              <a-image id="play-button" class="clickable" src="#icon-play" alpha-test="0.2" position="0 0 0.01" height="0.6" width="0.96"></a-image>
             </a-entity>
           </a-entity>
 
