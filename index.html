@@ -25,8 +25,8 @@
         // Check if the browser supports MP4 format
         const canPlayMP4 = videoPlayer.canPlayType( 'video/mp4; codecs="avc1.42E01E, mp4a.40.2"' );
         // Check if the browser supports WebM format        
-        const canPlayWebm = videoPlayer.canPlayType( 'video/webm; codecs="vp8, opus"' );    
-        // Video Play/Pause staus
+        //const canPlayWebm = videoPlayer.canPlayType( 'video/webm; codecs="vp8, opus"' );    
+        // Video Play/Pause status
         let status = false;   
         
       var showCta = () => {
@@ -56,7 +56,7 @@
         const mediaPanel = document.querySelector("#media-panel");
         const playButton = document.querySelector("#play-button");
         const videoMP4 = document.querySelector("#video-mp4");
-        const videoWebM = document.querySelector("#video-webm");
+        //const videoWebM = document.querySelector("#video-webm");
         const videoLink = document.querySelector("#video-link");
 
         const showMediaItem = (item) => {
@@ -78,34 +78,35 @@
           //videoMP4.play();
           //videoMP4.pause();
         }
-        console.log("status", status);
+        console.log("before status", status);
         // Play/Pause the video on pressing the play button
-        playButton.addEventListener('click', () => {
-          if(!status) {
-            playButton.setAttribute("visible", false);  
-            status = true;
-            console.log("status", status);
-            if (canPlayMP4 === "probably" || canPlayMP4 === "maybe") {
-              videoLink.setAttribute("src", "#video-mp4");
-              videoMP4.play();
-            }
-            else{
-              videoLink.setAttribute("src", "#video-webm");
-              videoWebM.play();
-            }
-          } else if (status) {
-            playButton.setAttribute("visible", true);
-            status = false;
-            if (canPlayMP4 === "probably" || canPlayMP4 === "maybe") {
-              videoLink.setAttribute("src", "#video-mp4");
-              videoMP4.pause();
-            }
-            else{
-              videoLink.setAttribute("src", "#video-webm");
-              videoWebM.pause();
-            }
-          }
-        });
+        // playButton.addEventListener('click', () => {
+        //   if(!status) {
+        //     playButton.setAttribute("visible", false);  
+        //     status = true;
+        //     console.log("after status", status);
+        //     if (canPlayMP4 === "probably" || canPlayMP4 === "maybe") {
+        //       videoLink.setAttribute("src", "#video-mp4");
+        //       videoMP4.play();
+        //     }
+        //     // else{
+        //     //   videoLink.setAttribute("src", "#video-webm");
+        //     //   videoWebM.play();
+        //     // }
+        //   } else if (status) {
+        //     playButton.setAttribute("visible", true);
+        //     status = false;
+        //     console.log("after status", status);
+        //     if (canPlayMP4 === "probably" || canPlayMP4 === "maybe") {
+        //       videoLink.setAttribute("src", "#video-mp4");
+        //       videoMP4.pause();
+        //     }
+        //     // else{
+        //     //   videoLink.setAttribute("src", "#video-webm");
+        //     //   videoWebM.pause();
+        //     // }
+        //   }
+        // });
       }
 
       // AR Config
@@ -113,12 +114,30 @@
         
         init: function () {
 
+          let targetVisible = false; // Prevent duplicate event calls
+          let isPlaying = false; // Track play state
           
 
           const playButton = document.querySelector("#play-button");
           const videoMP4 = document.querySelector("#video-mp4");
-          const videoWebM = document.querySelector("#video-webm");
+          //const videoWebM = document.querySelector("#video-webm");
           const videoLink = document.querySelector("#video-link");
+
+          function toggleVideoPlayback() {
+            if (!isPlaying) {
+              playButton.setAttribute("visible", false);
+              videoLink.setAttribute("src", "#video-mp4");
+              videoMP4.play();
+            } else {
+              playButton.setAttribute("visible", true);
+              videoLink.setAttribute("src", "#video-mp4");
+              videoMP4.pause();
+            }
+            isPlaying = !isPlaying;
+            console.log("Video Playback:", isPlaying);
+          }
+
+          playButton.addEventListener('click', toggleVideoPlayback);
 
           window.addEventListener("orientationchange", function () {
           console.log("Orientation changed: " + window.orientation);
@@ -133,10 +152,10 @@
               videoLink.setAttribute("src", "#video-mp4");
               videoMP4.pause();
             }
-            else{
-              videoLink.setAttribute("src", "#video-webm");
-              videoWebM.pause();
-            }
+            // else{
+            //   videoLink.setAttribute("src", "#video-webm");
+            //   videoWebM.pause();
+            // }
             playButton.setAttribute("visible", true);
             status = false;
           }
@@ -144,18 +163,18 @@
           setTimeout(() => {
             scene.play(); // Resume rendering
             arSystem.start(); // Restart tracking
-            // if (status === false) {
-            //   if (canPlayMP4 === "probably" || canPlayMP4 === "maybe") {
-            //     videoLink.setAttribute("src", "#video-mp4");
-            //     videoMP4.pause();
-            //   }
-            //   else{
-            //     videoLink.setAttribute("src", "#video-webm");
-            //     videoWebM.pause();
-            //   }
-            //   playButton.setAttribute("visible", true)
-            //   status = true;
-            // }
+            if (status === false) {
+              if (canPlayMP4 === "probably" || canPlayMP4 === "maybe") {
+                videoLink.setAttribute("src", "#video-mp4");
+                videoMP4.pause();
+              }
+              // else{
+              //   videoLink.setAttribute("src", "#video-webm");
+              //   videoWebM.pause();
+              // }
+              playButton.setAttribute("visible", true)
+              status = false;
+            }
           }, 100); // Delay to stabilize after rotation
         });
 
@@ -163,12 +182,14 @@
           // Video Player
           const videoPlayer = document.createElement( "video" );
           const canPlayMP4 = videoPlayer.canPlayType( 'video/mp4; codecs="avc1.42E01E, mp4a.40.2"' );
-          const canPlayWebm = videoPlayer.canPlayType( 'video/webm; codecs="vp8, opus"' ); 
+          //const canPlayWebm = videoPlayer.canPlayType( 'video/webm; codecs="vp8, opus"' ); 
           
           // On Target Found
           this.el.addEventListener('targetFound', event => {
             console.log("target found");
             console.log("target found", status);
+            if (targetVisible) return; // Prevent multiple triggers
+            targetVisible = true;
             // Double checks the video paused, when image target lost and found.
             // if (status === false) {
             //   if (canPlayMP4 === "probably" || canPlayMP4 === "maybe") {
@@ -189,25 +210,34 @@
                 // next function
               }, 300);
             });
+            if (!isPlaying) {
+              playButton.setAttribute("visible", true);
+            }
           });
 
           // On Target Lost 
           this.el.addEventListener('targetLost', event => {
             console.log("target lost");
             console.log("target lost", status);
+            videoMP4.pause();
+            playButton.setAttribute("visible", true);
+            isPlaying = false; 
+            targetVisible = false; // Allow re-trigger when found again
+
             // Pause the video, when image target lost
-            if (status === true) {
-              if (canPlayMP4 === "probably" || canPlayMP4 === "maybe") {
-                videoLink.setAttribute("src", "#video-mp4");
-                videoMP4.pause();
-              }
-              else{
-                videoLink.setAttribute("src", "#video-webm");
-                videoWebM.pause();
-              }
-              playButton.setAttribute("visible", true);
-              status = false;
-            }
+            // if (status === true) {
+            //   if (canPlayMP4 === "probably" || canPlayMP4 === "maybe") {
+            //     videoLink.setAttribute("src", "#video-mp4");
+            //     videoMP4.pause();
+            //   }
+            //   // else{
+            //   //   videoLink.setAttribute("src", "#video-webm");
+            //   //   videoWebM.pause();
+            //   // }
+            //   playButton.setAttribute("visible", true);
+            //   status = false;
+            //   console.log("after status", status);
+            // }
               
           });
         }
