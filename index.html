@@ -113,19 +113,33 @@
   
           const scene = document.querySelector("a-scene");
           const arSystem = scene.systems["mindar-image-system"];
+          const videoMP4 = document.querySelector("#video-mp4");
+          const playButton = document.querySelector("#play-button");
+
+          let wasPlaying = !videoMP4.paused; // Check if video was playing before orientation change
+
 
           scene.pause(); // Pause rendering
           arSystem.stop(); // Stop 
-          
-          // Pause video and reset button visibility
+
+          // Pause video and prevent audio from playing in background
           videoMP4.pause();
-          playButton.setAttribute("visible", true);
-          isPlaying = false;
+          
+          // // Pause video and reset button visibility
+          // videoMP4.pause();
+          // playButton.setAttribute("visible", true);
+          // isPlaying = false;
 
           setTimeout(() => {
             scene.play(); // Resume rendering
             arSystem.start(); // Restart tracking
-            playButton.setAttribute("visible", true);
+            if (wasPlaying) {
+            videoMP4.play(); // Resume playback if it was playing before
+            playButton.setAttribute("visible", false); // Hide play button
+            } else {
+            playButton.setAttribute("visible", true); // Show play button if it was paused
+            }
+            //playButton.setAttribute("visible", true);
           }, 100); // Delay to stabilize after rotation
         });
 
