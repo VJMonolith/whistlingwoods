@@ -1,71 +1,318 @@
-<!-- <!DOCTYPE html> -->
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <title>AR Experience</title>
-  <script src="scripts/aframe.min.js"></script>
-  <script src="scripts/mindar-image-aframe.prod.js"></script>
-  <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-  <!-- Scanning Overlay -->
-  <div id="example-scanning-overlay" class="hidden">
-    <div class="inner">
-      <img src="target/image.jpg" alt="Scan Target">
-      <div class="scanline"></div>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+
+    <!-- Mind AR Plugin -->
+    <!-- <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.2/dist/mindar-image-aframe.prod.js"></script> -->
+
+    <script src="scripts/aframe.min.js"></script>
+    <script src="scripts/mindar-image-aframe.prod.js"></script>
+
+    <!-- Google Analytics -->
+    <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=G-6QH99Y0XFB"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-6QH99Y0XFB');
+    </script> -->
+
+    <script>
+        // Video Player
+        const videoPlayer = document.createElement( "video" );
+        // Check if the browser supports MP4 format
+        const canPlayMP4 = videoPlayer.canPlayType( 'video/mp4; codecs="avc1.42E01E, mp4a.40.2"' );
+        let status = false;   
+        
+      var showCta = () => {
+        const downloadButton = document.querySelector("#download-button");
+        const ctaPanel = document.querySelector("#cta-panel");
+
+        const showCtaItem = (item) => {
+            document.querySelector("#cta-item" + item).setAttribute("visible", 0 === item);
+        }
+        
+        showCtaItem(0)
+
+        setTimeout(() => { // Delay the animation
+          ctaPanel.setAttribute("visible", true); // Make the CTA Button visible
+          ctaPanel.emit('pop'); // Start the pop-out animation
+          setTimeout(() => {
+            ctaPanel.emit('reset'); // Reset to normal size
+          }, 180); // Reset after pop animation duration
+        }, 250); // Delay of 250 milliseconds
+
+        downloadButton.addEventListener('click', function (evt) {
+          window.location.href="https://monolith.asia";
+        });       
+      }
+
+      const showMedia = () => {
+        const mediaPanel = document.querySelector("#media-panel");
+        const playButton = document.querySelector("#play-button");
+        const videoMP4 = document.querySelector("#video-mp4");
+        const videoLink = document.querySelector("#video-link");
+
+        const showMediaItem = (item) => {
+          document.querySelector("#media-item" + item).setAttribute("visible", 0 === item);
+        }
+
+        showMediaItem(0) 
+
+        setTimeout(() => { // Delay the animation
+          mediaPanel.setAttribute("visible", true); // Make the media player visible
+          mediaPanel.emit('pop'); // Start the pop-out animation
+          setTimeout(() => {
+            mediaPanel.emit('reset'); // Reset to normal size
+          }, 180); // Reset after pop animation duration
+        }, 250); // Delay of 250 milliseconds
+        
+        if (mediaPanel.getAttribute("visible", true)) {
+          videoLink.getAttribute("src");
+        }
+      }
+
+      // AR Config
+      AFRAME.registerComponent('mytarget', {
+        
+        init: function () {
+
+          let targetVisible = false; // Prevent duplicate event calls
+          let isPlaying = false; // Track play state
+          
+
+          const playButton = document.querySelector("#play-button");
+          const videoMP4 = document.querySelector("#video-mp4");
+          const videoLink = document.querySelector("#video-link");
+
+          // Play/Pause the video on pressing the play button
+          function toggleVideoPlayback() {
+            if (!isPlaying) {
+              playButton.setAttribute("visible", false);
+              videoLink.setAttribute("src", "#video-mp4");
+              videoMP4.play();
+            } else {
+              playButton.setAttribute("visible", true);
+              videoLink.setAttribute("src", "#video-mp4");
+              videoMP4.pause();
+            }
+            isPlaying = !isPlaying;
+          }
+
+          playButton.addEventListener('click', toggleVideoPlayback);
+
+          window.addEventListener("orientationchange", function () {
+          const scene = document.querySelector("a-scene");
+          const arSystem = scene.systems["mindar-image-system"];
+          const videoMP4 = document.querySelector("#video-mp4");
+          const playButton = document.querySelector("#play-button");
+
+          let wasPlaying = !videoMP4.paused; // Check if video was playing before orientation change
+
+
+          scene.pause(); // Pause rendering
+          arSystem.stop(); // Stop 
+
+          // Pause video and prevent audio from playing in background
+          videoMP4.pause();
+          
+
+          setTimeout(() => {
+            scene.play(); // Resume rendering
+            arSystem.start(); // Restart tracking
+            if (wasPlaying) {
+            videoMP4.play(); // Resume playback if it was playing before
+            playButton.setAttribute("visible", false); // Hide play button
+            } else {
+            playButton.setAttribute("visible", true); // Show play button if it was paused
+            }
+          }, 100); // Delay to stabilize after rotation
+        });
+
+
+          // Video Player
+          const videoPlayer = document.createElement( "video" );
+          const canPlayMP4 = videoPlayer.canPlayType( 'video/mp4; codecs="avc1.42E01E, mp4a.40.2"' );
+          
+          // On Target Found
+          this.el.addEventListener('targetFound', event => {
+            if (targetVisible) return; // Prevent multiple triggers
+            targetVisible = true;
+        
+            showCta();
+            showMedia(() => {
+              setTimeout(() => {
+                // next function
+              }, 300);
+            });
+            if (!isPlaying) {
+              playButton.setAttribute("visible", true);
+            }
+          });
+
+          // On Target Lost 
+          this.el.addEventListener('targetLost', event => {
+            videoMP4.pause();
+            playButton.setAttribute("visible", true);
+            isPlaying = false; 
+            targetVisible = false; // Allow re-trigger when found again              
+          });
+        }
+      });
+    </script>
+
+    <style>
+      body {
+        margin: 0;
+      }
+      .example-container {
+        overflow: hidden;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+      }
+     
+      #example-scanning-overlay {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	background: transparent;
+	z-index: 2;
+      }
+      @media (min-aspect-ratio: 1/1) {
+	#example-scanning-overlay .inner {
+	  width: 50vh;
+	  height: 33vh;
+	}
+      }
+      @media (max-aspect-ratio: 1/1) {
+	#example-scanning-overlay .inner {
+	  width: 85vw;
+	  height: 55vw;
+	}
+      }
+
+  #example-scanning-overlay .inner {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	position: relative;
+
+	background:
+	  linear-gradient(to right, white 10px, transparent 10px) 0 0,
+	  linear-gradient(to right, white 10px, transparent 10px) 0 100%,
+	  linear-gradient(to left, white 10px, transparent 10px) 100% 0,
+	  linear-gradient(to left, white 10px, transparent 10px) 100% 100%,
+	  linear-gradient(to bottom, white 10px, transparent 10px) 0 0,
+	  linear-gradient(to bottom, white 10px, transparent 10px) 100% 0,
+	  linear-gradient(to top, white 10px, transparent 10px) 0 100%,
+	  linear-gradient(to top, white 10px, transparent 10px) 100% 100%;
+	  background-repeat: no-repeat;
+	  background-size: 40px 40px;
+      }
+
+    #example-scanning-overlay.hidden {
+	    display: none;
+      }
+
+    #example-scanning-overlay img {
+	    opacity: 0.6;
+	    width: 90%;
+	    align-self: center;
+      }
+
+    #example-scanning-overlay .inner .scanline {
+	    position: absolute;
+	    width: 100%;
+	    height: 10px;
+	    background: white;
+	    animation: move 2s linear infinite;
+      }
+      @keyframes move {
+	    0%, 100% { top: 0% }
+	    50% { top: calc(100% - 10px) }
+      }
+
+      /* CSS for positioning the image */
+    #right-bottom-footer {
+      position: absolute;
+      bottom: 30px; /* Adjust distance from the bottom */
+      right: 30px; /* Adjust distance from the right */
+      z-index: 10; /* Ensure it stays above the AR scene */
+    }
+
+    #right-bottom-footer img {
+      max-width: 300px; /* Limit the image size */
+      height: auto;
+    }
+    </style>
+  </head>
+  <body>
+
+    <!-- Image Scanning UI -->
+    <div class="example-container">
+      <div id="example-scanning-overlay" class="hidden">
+	      <div class="inner">
+	        <img src="target\image.jpg"/>
+	        <div class="scanline"></div>
+	      </div>
+      </div>
+    <div>
+      <!-- Scene Setup -->
+      <a-scene mindar-image="filterMinCF:0.001; filterBeta: 50; warmupTolerance: 5; missTolerance: 5; imageTargetSrc: target/image.mind; showStats: false; uiScanning: #example-scanning-overlay;" embedded color-space="sRGB" renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false">
+        
+        <!-- Assets -->
+        <a-assets>
+          <img id="card" src="target\image.jpg" />
+          <img id="icon-play" src="img\playIcon.png" />
+          <img id="icon-download" src="img\download.png" />
+          <img id="icon-logo" src="img\logo.png" />
+          <video id="video-mp4" autoplay="false" loop="true" src="video/video.mp4"></video>
+          
+        </a-assets>
+
+        <!-- AR Camera Config -->
+        <a-camera position="0 0 0" look-controls="enabled: false" cursor="fuse: false; rayOrigin: mouse;" raycaster="far: 10000; objects: .clickable"></a-camera>
+
+        <!-- Image Target -->
+        <a-entity id="mytarget" mytarget mindar-image-target="targetIndex: 0" position="0 0 -0.5" scale="1.5 1.5 1.5">
+
+          <!-- Image Place Holder -->
+          <a-plane visible=false src="#card" position="0 0 0.05" height="0.6" width="0.96" rotation="0 0 0"></a-plane>
+
+          <!-- Media Player -->
+          <a-entity visible=false id="media-panel" position="-0.002 0 0.08"
+              animation__pop="property: scale; from: 0 1 1; to: 1.2 1 1; dur: 180; easing: easeOutQuad; startEvents: pop"
+              animation__reset="property: scale; to: 1 1 1; dur: 180; easing: easeOutQuad; startEvents: reset">
+            <a-entity id="media-item0">
+              <a-video id="video-link" webkit-playsinline playsinline width="0.96" height="0.6" position="0 0 0"></a-video>
+              <a-image id="play-button" class="clickable" src="#icon-play" alpha-test="0.2" position="0 0 0.01" height="0.6" width="0.96"></a-image>
+            </a-entity>
+          </a-entity>
+
+          <!-- CTA Button -->
+          <a-entity visible=false id="cta-paneljaga" position="0 -0.4 0.08"
+              animation__pop="property: scale; from: 1 1 1; to: 1.3 1.3 1.3; dur: 180; easing: easeOutQuad; startEvents: pop"
+              animation__reset="property: scale; to: 1 1 1; dur: 180; easing: easeOutQuad; startEvents: reset">
+            <a-entity id="cta-item0">
+              <a-image  id="download-button" class="clickable" src="#icon-download" alpha-test="0.5" position="0 0 0" height="0.1" width="0.3" 
+              ></a-image>
+            </a-entity>
+          </a-entity>
+
+        </a-entity>
+      </a-scene>
     </div>
-  </div>
-
-  <!-- AR Scene -->
-  <a-scene mindar-image="filterMinCF:0.001; filterBeta: 50; warmupTolerance: 5; missTolerance: 5; imageTargetSrc: target/image.mind; showStats: false; uiScanning: #example-scanning-overlay;"
-           embedded color-space="sRGB" renderer="colorManagement: true, physicallyCorrectLights"
-           vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false">
-    
-    <!-- Assets -->
-    <a-assets>
-      <img id="card" src="target/image.jpg" alt="Card">
-      <img id="icon-play" src="img/playIcon.png" alt="Play Icon">
-      <img id="icon-download" src="img/download.png" alt="Download Icon">
-      <img id="icon-logo" src="img/logo.png" alt="Logo">
-      <video id="video-mp4" autoplay="false" loop="true" src="video/video.mp4"></video>
-    </a-assets>
-
-    <!-- AR Camera -->
-    <a-camera position="0 0 0" look-controls="enabled: false" cursor="fuse: false; rayOrigin: mouse;" raycaster="far: 10000; objects: .clickable"></a-camera>
-
-    <!-- Image Target -->
-    <a-entity id="mytarget" mytarget mindar-image-target="targetIndex: 0" position="0 0 -0.5" scale="1.5 1.5 1.5">
-      <!-- Image Placeholder -->
-      <a-plane visible="false" src="#card" position="0 0 0.05" height="0.6" width="0.96" rotation="0 0 0"></a-plane>
-
-      <!-- Media Player -->
-      <a-entity visible="false" id="media-panel" position="-0.002 0 0.08"
-                animation__pop="property: scale; from: 0 1 1; to: 1.2 1 1; dur: 180; easing: easeOutQuad; startEvents: pop"
-                animation__reset="property: scale; to: 1 1 1; dur: 180; easing: easeOutQuad; startEvents: reset">
-        <a-entity id="media-item0">
-          <a-video id="video-link" webkit-playsinline playsinline width="0.96" height="0.6" position="0 0 0"></a-video>
-          <a-image id="play-button" class="clickable" src="#icon-play" alpha-test="0.2" position="0 0 0.01" height="0.6" width="0.96"></a-image>
-        </a-entity>
-      </a-entity>
-
-      <!-- CTA Button -->
-      <a-entity visible="false" id="cta-panel" position="0 -0.4 0.08"
-                animation__pop="property: scale; from: 1 1 1; to: 1.3 1.3 1.3; dur: 180; easing: easeOutQuad; startEvents: pop"
-                animation__reset="property: scale; to: 1 1 1; dur: 180; easing: easeOutQuad; startEvents: reset">
-        <a-entity id="cta-item0">
-          <a-image id="download-button" class="clickable" src="#icon-download" alpha-test="0.5" position="0 0 0" height="0.1" width="0.3"></a-image>
-        </a-entity>
-      </a-entity>
-    </a-entity>
-  </a-scene>
-
-  <!-- Footer Logo -->
-  <div id="right-bottom-footer">
-    <img src="img/logo.png" alt="Footer Logo">
-  </div>
-
-  <script src="scripts/main.js"></script>
-</body>
+  <!-- Footer Logo  -->
+    <div id="right-bottom-footer">
+      <img src="img\logo.png" alt="Footer">
+    </div>
+  </body>
 </html>
