@@ -16,6 +16,7 @@
         const banner = document.getElementById("cookie-consent-banner");
         const acceptBtn = document.getElementById("acceptCookies");
         const declineBtn = document.getElementById("declineCookies");
+        const arCamera = document.getElementById("arCamera");
     
         function loadGoogleAnalytics() {
           let script = document.createElement("script");
@@ -44,9 +45,11 @@
     
         if (cookieConsent === "accepted") {
           loadGoogleAnalytics();
+          arCamera.setAttribute("visible", true);
           banner.style.display = "none";
         } else if (cookieConsent === "denied") {
           banner.style.display = "none";
+          arCamera.setAttribute("visible", true);
         } else {
           banner.style.display = "flex"; // Show banner if no choice made
         }
@@ -54,12 +57,14 @@
         acceptBtn.addEventListener("click", function () {
           localStorage.setItem("cookieConsent", "accepted");
           loadGoogleAnalytics(); // Load GA only after acceptance
+          arCamera.setAttribute("visible", true);
           banner.style.display = "none";
         });
     
         declineBtn.addEventListener("click", function () {
           localStorage.setItem("cookieConsent", "denied");
           banner.style.display = "none";
+          arCamera.setAttribute("visible", true);
         });
       });
     </script>
@@ -392,7 +397,7 @@
       </div>
     <div>
       <!-- Scene Setup -->
-      <a-scene mindar-image="filterMinCF:0.001; filterBeta: 50; warmupTolerance: 5; missTolerance: 5; imageTargetSrc: target/image.mind; showStats: false; uiScanning: #example-scanning-overlay;" embedded color-space="sRGB" renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false">
+      <a-scene id="arCamera" visible=false mindar-image="filterMinCF:0.001; filterBeta: 50; warmupTolerance: 5; missTolerance: 5; imageTargetSrc: target/image.mind; showStats: false; uiScanning: #example-scanning-overlay;" embedded color-space="sRGB" renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false">
         
         <!-- Assets -->
         <a-assets>
