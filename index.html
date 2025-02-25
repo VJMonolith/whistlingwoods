@@ -11,13 +11,45 @@
     <script src="scripts/mindar-image-aframe.prod.js"></script>
 
     <!-- Google Analytics -->
-    <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=G-6QH99Y0XFB"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-6QH99Y0XFB"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
       gtag('config', 'G-6QH99Y0XFB');
-    </script> -->
+    </script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const banner = document.getElementById("cookie-consent-banner");
+  const acceptBtn = document.getElementById("acceptCookies");
+  const declineBtn = document.getElementById("declineCookies");
+
+  if (localStorage.getItem("cookieConsent") === "accepted" || localStorage.getItem("cookieConsent") === "denied") {
+      banner.style.display = "none"; // Hide banner if already set
+  } else {
+      banner.style.display = "flex"; // Show banner if no choice made
+  }
+
+  acceptBtn.addEventListener("click", function () {
+      gtag('consent', 'update', {
+          'ad_storage': 'granted',
+          'analytics_storage': 'granted'
+      });
+      localStorage.setItem("cookieConsent", "accepted");
+      banner.style.display = "none";
+  });
+
+  declineBtn.addEventListener("click", function () {
+      gtag('consent', 'update', {
+          'ad_storage': 'denied',
+          'analytics_storage': 'denied'
+      });
+      localStorage.setItem("cookieConsent", "denied");
+      banner.style.display = "none";
+  });
+});
+</script>
+  
 
     <script>
         // Video Player
@@ -253,8 +285,86 @@
       height: auto;
     }
     </style>
+   <style>
+    #cookie-consent-banner {
+      display: none;
+      position: fixed;
+      bottom: 10px;
+      left: 10px;
+      right: 10px;
+      background: linear-gradient(135deg, #6e8efb, #a777e3);
+      color: white;
+      padding: 12px 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      font-family: Arial, sans-serif;
+      font-size: 14px;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+  
+    #cookie-consent-banner p {
+      margin: 0;
+      flex-grow: 1;
+      font-size: 14px;
+    }
+  
+    #cookie-consent-banner button {
+      background: #4CAF50;
+      color: white;
+      border: none;
+      padding: 10px 16px;
+      margin-left: 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: 0.3s;
+      font-size: 14px;
+    }
+  
+    #declineCookies {
+      background: #f44336;
+    }
+  
+    button:hover {
+      opacity: 0.8;
+    }
+  
+    /* Tablet and Mobile Responsive */
+    @media (max-width: 1024px) {
+      #cookie-consent-banner {
+        flex-direction: column;
+        text-align: center;
+        padding: 15px;
+      }
+      #cookie-consent-banner p {
+        font-size: 16px;
+      }
+      #cookie-consent-banner div {
+        display: flex;
+        justify-content: center;
+        margin-top: 10px;
+      }
+      #cookie-consent-banner button {
+        width: 120px;
+        margin: 5px;
+        font-size: 16px;
+      }
+    }
+  </style>
   </head>
   <body>
+
+    <div id="cookie-consent-banner" style="display: none; position: fixed; bottom: 10px; left: 10px; right: 10px; background: linear-gradient(135deg, #6e8efb, #a777e3); color: white; padding: 12px 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); display: flex; align-items: center; justify-content: space-between; font-family: Arial, sans-serif; font-size: 14px; z-index: 1000;">
+      <p style="margin: 0; flex-grow: 1;">We use cookies to enhance your experience. Accept to continue.</p>
+      <div>
+        <button id="acceptCookies" style="background: #4CAF50; color: white; border: none; padding: 8px 16px; margin-left: 10px; border-radius: 6px; cursor: pointer; transition: 0.3s;">Accept</button>
+        <button id="declineCookies" style="background: #f44336; color: white; border: none; padding: 8px 16px; margin-left: 10px; border-radius: 6px; cursor: pointer; transition: 0.3s;">Decline</button>
+      </div>
+    </div>
+
 
     <!-- Image Scanning UI -->
     <div class="example-container">
