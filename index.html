@@ -62,12 +62,16 @@
           });
           arCamera.setAttribute("visible", true);
           banner.style.display = "none";
+          // Refresh the page and bypass the cache
+          location.reload(true);
         });
     
         declineBtn.addEventListener("click", function () {
           localStorage.setItem("cookieConsent", "denied");
           banner.style.display = "none";
           arCamera.setAttribute("visible", true);
+          // Refresh the page and bypass the cache
+          location.reload(true);
         });
       });
     </script>
