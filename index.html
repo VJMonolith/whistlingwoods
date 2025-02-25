@@ -17,7 +17,10 @@
         const acceptBtn = document.getElementById("acceptCookies");
         const declineBtn = document.getElementById("declineCookies");
         const arCamera = document.getElementById("arCamera");
-        const scanUI = document.getElementById("scanUI");
+        const scanUI = document.getElementById("example-scanning-overlay");
+
+        scanUI.style.display = "none";
+
     
         function loadGoogleAnalytics() {
           let script = document.createElement("script");
@@ -47,12 +50,12 @@
         if (cookieConsent === "accepted") {
           loadGoogleAnalytics();
           arCamera.setAttribute("visible", true);
-          scanUI.setAttribute("visible", true);
+          scanUI.style.display = "flex";
           banner.style.display = "none";
         } else if (cookieConsent === "denied") {
           banner.style.display = "none";
           arCamera.setAttribute("visible", true);
-          scanUI.setAttribute("visible", true);
+          scanUI.style.display = "flex";
         } else {
           banner.style.display = "flex"; // Show banner if no choice made
         }
@@ -61,15 +64,15 @@
           localStorage.setItem("cookieConsent", "accepted");
           loadGoogleAnalytics(); // Load GA only after acceptance
           arCamera.setAttribute("visible", true);
-          scanUI.setAttribute("visible", true);
+          scanUI.style.display = "flex";
           banner.style.display = "none";
         });
     
         declineBtn.addEventListener("click", function () {
           localStorage.setItem("cookieConsent", "denied");
           banner.style.display = "none";
+          scanUI.style.display = "flex";
           arCamera.setAttribute("visible", true);
-          scanUI.setAttribute("visible", true);
         });
       });
     </script>
@@ -393,8 +396,8 @@
 
 
     <!-- Image Scanning UI -->
-    <div id="scanUI" visible=false class="example-container">
-      <div id="example-scanning-overlay" class="hidden">
+    <div class="example-container">
+      <div id="example-scanning-overlay" class="hidden" style="display: none;">
 	      <div class="inner">
 	        <img src="target\image.jpg"/>
 	        <div class="scanline"></div>
