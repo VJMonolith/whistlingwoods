@@ -11,6 +11,7 @@
     <script src="scripts/mindar-image-aframe.prod.js"></script>
 
     <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-6QH99Y0XFB"></script>
     <script>
       document.addEventListener("DOMContentLoaded", function () {
         const banner = document.getElementById("cookie-consent-banner");
@@ -21,34 +22,27 @@
 
         scanUI.style.display = "none";
 
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        window.gtag = gtag;
     
-        function loadGoogleAnalytics() {
-          let script = document.createElement("script");
-          script.async = true;
-          script.src = "https://www.googletagmanager.com/gtag/js?id=G-6QH99Y0XFB";
-          document.head.appendChild(script);
+        gtag('js', new Date());
+        gtag('config', 'G-6QH99Y0XFB');
     
-          script.onload = function () {
-            window.dataLayer = window.dataLayer || [];
-            function gtag() { dataLayer.push(arguments); }
-            window.gtag = gtag;
-    
-            gtag('js', new Date());
-            gtag('config', 'G-6QH99Y0XFB');
-    
-            // Update consent **AFTER** GA is fully loaded
-            gtag('consent', 'update', {
-              'ad_storage': 'granted',
-              'analytics_storage': 'granted'
-            });
-          };
-        }
+        // Update consent **AFTER** GA is fully loaded
+        gtag('consent', 'update', {
+          'ad_storage': 'denied',
+          'analytics_storage': 'denied',
+        });
     
         // Check if consent was already given
         const cookieConsent = localStorage.getItem("cookieConsent");
     
         if (cookieConsent === "accepted") {
-          loadGoogleAnalytics();
+          gtag('consent', 'update', {
+            'ad_storage': 'granted',
+            'analytics_storage': 'granted'
+          });
           arCamera.setAttribute("visible", true);
           scanUI.style.display = "flex";
           banner.style.display = "none";
@@ -62,7 +56,10 @@
     
         acceptBtn.addEventListener("click", function () {
           localStorage.setItem("cookieConsent", "accepted");
-          loadGoogleAnalytics(); // Load GA only after acceptance
+          gtag('consent', 'update', {
+            'ad_storage': 'granted',
+            'analytics_storage': 'granted'
+          });
           arCamera.setAttribute("visible", true);
           scanUI.style.display = "flex";
           banner.style.display = "none";
