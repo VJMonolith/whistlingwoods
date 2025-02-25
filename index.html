@@ -144,6 +144,7 @@
           const playButton = document.querySelector("#play-button");
           const videoMP4 = document.querySelector("#video-mp4");
           const videoLink = document.querySelector("#video-link");
+          const scanUI = document.getElementById("example-scanning-overlay");
 
           // Play/Pause the video on pressing the play button
           function toggleVideoPlayback() {
@@ -196,6 +197,7 @@
           
           // On Target Found
           this.el.addEventListener('targetFound', event => {
+            scanUI.style.display = "none";
             if (targetVisible) return; // Prevent multiple triggers
             targetVisible = true;
         
@@ -212,6 +214,7 @@
 
           // On Target Lost 
           this.el.addEventListener('targetLost', event => {
+            scanUI.style.display = "flex";
             videoMP4.pause();
             playButton.setAttribute("visible", true);
             isPlaying = false; 
