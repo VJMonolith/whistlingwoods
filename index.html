@@ -17,6 +17,7 @@
         const acceptBtn = document.getElementById("acceptCookies");
         const declineBtn = document.getElementById("declineCookies");
         const arCamera = document.getElementById("arCamera");
+        const scanUI = document.getElementById("scanUI");
     
         function loadGoogleAnalytics() {
           let script = document.createElement("script");
@@ -46,10 +47,12 @@
         if (cookieConsent === "accepted") {
           loadGoogleAnalytics();
           arCamera.setAttribute("visible", true);
+          scanUI.setAttribute("visible", true);
           banner.style.display = "none";
         } else if (cookieConsent === "denied") {
           banner.style.display = "none";
           arCamera.setAttribute("visible", true);
+          scanUI.setAttribute("visible", true);
         } else {
           banner.style.display = "flex"; // Show banner if no choice made
         }
@@ -58,6 +61,7 @@
           localStorage.setItem("cookieConsent", "accepted");
           loadGoogleAnalytics(); // Load GA only after acceptance
           arCamera.setAttribute("visible", true);
+          scanUI.setAttribute("visible", true);
           banner.style.display = "none";
         });
     
@@ -65,6 +69,7 @@
           localStorage.setItem("cookieConsent", "denied");
           banner.style.display = "none";
           arCamera.setAttribute("visible", true);
+          scanUI.setAttribute("visible", true);
         });
       });
     </script>
@@ -388,7 +393,7 @@
 
 
     <!-- Image Scanning UI -->
-    <div class="example-container">
+    <div id="scanUI" visible=false class="example-container">
       <div id="example-scanning-overlay" class="hidden">
 	      <div class="inner">
 	        <img src="target\image.jpg"/>
