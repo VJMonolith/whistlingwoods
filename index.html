@@ -11,73 +11,132 @@
     <script src="scripts/mindar-image-aframe.prod.js"></script>
 
     <!-- Google Analytics -->
+    <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=G-B5KGQHBNP4"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-B5KGQHBNP4');
+    </script> -->
+
+    <!-- Google Analytics (Loads Always) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-B5KGQHBNP4"></script>
     <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        const banner = document.getElementById("cookie-consent-banner");
-        const acceptBtn = document.getElementById("acceptCookies");
-        const declineBtn = document.getElementById("declineCookies");
-        const arCamera = document.getElementById("arCamera");
-        const scanUI = document.getElementById("example-scanning-overlay");
+      window.dataLayer = window.dataLayer || []; // ✅ Ensure dataLayer is defined early
+    
+      function gtag(){ dataLayer.push(arguments); }
+    
+      // Wait for the GA script to load before calling gtag
+      window.addEventListener("DOMContentLoaded", function() {
+      const scene = document.querySelector("a-scene");
+      const arSystem = scene.systems["mindar-image-system"];
 
-        scanUI.style.display = "none";
+      if (arSystem) {
+        scene.play();  // Resume rendering
+        arSystem.start(); // Restart MindAR
+      }
 
-        window.dataLayer = window.dataLayer || [];
-        function gtag() { dataLayer.push(arguments); }
-        window.gtag = gtag;
-    
-        gtag('js', new Date());
-        gtag('config', 'G-B5KGQHBNP4');
-    
-        // Update consent **AFTER** GA is fully loaded
-        gtag('consent', 'update', {
-          'ad_storage': 'denied',
-          'analytics_storage': 'denied',
-        });
-    
-        // Check if consent was already given
-        const cookieConsent = localStorage.getItem("cookieConsent");
-    
-        if (cookieConsent === "accepted") {
-          gtag('consent', 'update', {
-            'ad_storage': 'granted',
-            'analytics_storage': 'granted'
-          });
-          arCamera.setAttribute("visible", true);
-          scanUI.style.display = "flex";
-          banner.style.display = "none";
-        } else if (cookieConsent === "denied") {
-          banner.style.display = "none";
-          arCamera.setAttribute("visible", true);
-          scanUI.style.display = "flex";
-        } else {
-          banner.style.display = "flex"; // Show banner if no choice made
-        }
-    
-        acceptBtn.addEventListener("click", function () {
-          localStorage.setItem("cookieConsent", "accepted");
-          gtag('consent', 'update', {
-            'ad_storage': 'granted',
-            'analytics_storage': 'granted'
-          });
-          arCamera.setAttribute("visible", true);
-          banner.style.display = "none";
-          // Refresh the page and bypass the cache
-          location.reload(true);
-        });
-    
-        declineBtn.addEventListener("click", function () {
-          localStorage.setItem("cookieConsent", "denied");
-          banner.style.display = "none";
-          arCamera.setAttribute("visible", true);
-          // Refresh the page and bypass the cache
-          location.reload(true);
-        });
+      gtag('consent', 'default', {
+        'ad_storage': 'denied',
+        'analytics_storage': 'denied'
       });
+
+      gtag('js', new Date());
+      gtag('config', 'G-B5KGQHBNP4');
+    });
+
     </script>
     
-    
-  
+
+    <script>
+      window.onload = function() {
+        const consentBanner = document.getElementById("consent-banner");
+        const acceptBtn = document.getElementById("accept-consent");
+        const declineBtn = document.getElementById("decline-consent");
+        const scene = document.querySelector("a-scene");
+        const arSystem = scene.systems["mindar-image-system"];
+
+        
+
+        if (!localStorage.getItem("ga_consent")) {
+          consentBanner.style.display = "block"; // Show banner if no consent stored
+        } else if (localStorage.getItem("ga_consent") === "granted") {
+          
+          enableTracking();
+          const scene = document.querySelector("a-scene");
+
+          scene.addEventListener("loaded", () => {
+            console.log("A-Frame Scene Loaded!");
+
+            const arSystem = scene.systems["mindar-image-system"];
+
+            if (arSystem) {
+              if (!localStorage.getItem("ga_consent")) {
+                consentBanner.style.display = "block"; // Show banner if no consent stored
+              } else {
+                enableTracking();
+                arSystem.start();
+              }
+            } else {
+              console.warn("MindAR system not found. Retrying...");
+              setTimeout(() => {
+                scene.systems["mindar-image-system"]?.start();
+              }, 1000);
+            }
+          });
+        }
+        else if (localStorage.getItem("ga_consent") === "denied") {
+          
+          const scene = document.querySelector("a-scene");
+
+          scene.addEventListener("loaded", () => {
+            console.log("A-Frame Scene Loaded!");
+
+            const arSystem = scene.systems["mindar-image-system"];
+
+            if (arSystem) {
+              if (!localStorage.getItem("ga_consent")) {
+                consentBanner.style.display = "block"; // Show banner if no consent stored
+              } else {
+                enableTracking();
+                arSystem.start();
+              }
+            } else {
+              console.warn("MindAR system not found. Retrying...");
+              setTimeout(() => {
+                scene.systems["mindar-image-system"]?.start();
+              }, 1000);
+            }
+          });
+        }
+
+        acceptBtn.addEventListener("click", function () {
+          localStorage.setItem("ga_consent", "granted");
+          enableTracking();
+          scene.systems["mindar-image-system"].start();
+          consentBanner.style.display = "none";
+          
+        });
+
+        declineBtn.addEventListener("click", function () {
+          localStorage.setItem("ga_consent", "denied");
+          consentBanner.style.display = "none";
+          scene.systems["mindar-image-system"].start();
+        });
+      };
+
+
+      function enableTracking() {
+        gtag('consent', 'update', {
+          'ad_storage': 'granted',
+          'analytics_storage': 'granted'
+        });
+        gtag('config', 'G-B5KGQHBNP4');
+      }
+    </script>
+
+
+
 
     <script>
         // Video Player
@@ -195,13 +254,17 @@
           // Video Player
           const videoPlayer = document.createElement( "video" );
           const canPlayMP4 = videoPlayer.canPlayType( 'video/mp4; codecs="avc1.42E01E, mp4a.40.2"' );
-          const scanUI = document.getElementById("example-scanning-overlay");
+
+          const scanningOverlay = document.getElementById("example-scanning-overlay");
           
           // On Target Found
           this.el.addEventListener('targetFound', event => {
             if (targetVisible) return; // Prevent multiple triggers
             targetVisible = true;
-            scanUI.style.display = "none";
+
+            // Hide scanning UI when target is found
+            // scanningOverlay.classList.add("hidden");
+            // scanningOverlay.style.display = "none"; // Ensure it's completely removed
         
             showCta();
             showMedia(() => {
@@ -217,10 +280,13 @@
           // On Target Lost 
           this.el.addEventListener('targetLost', event => {
             videoMP4.pause();
-            scanUI.style.display = "flex";
             playButton.setAttribute("visible", true);
             isPlaying = false; 
-            targetVisible = false; // Allow re-trigger when found again              
+            targetVisible = false; // Allow re-trigger when found again 
+            
+            // Show scanning UI when target is lost
+            // scanningOverlay.classList.remove("hidden");
+            // scanningOverlay.style.display = "flex"; // Ensure it's visible again
           });
         }
       });
@@ -316,90 +382,63 @@
       height: auto;
     }
     </style>
-   <style>
-    #cookie-consent-banner {
-      display: none;
-      position: fixed;
-      bottom: 10px;
-      left: 10px;
-      right: 10px;
-      background: linear-gradient(135deg, #6e8efb, #a777e3);
-      color: white;
-      padding: 12px 20px;
-      border-radius: 12px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      font-family: Arial, sans-serif;
-      font-size: 14px;
-      z-index: 1000;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-    }
-  
-    #cookie-consent-banner p {
-      margin: 0;
-      flex-grow: 1;
-      font-size: 14px;
-    }
-  
-    #cookie-consent-banner button {
-      background: #4CAF50;
-      color: white;
-      border: none;
-      padding: 10px 16px;
-      margin-left: 10px;
-      border-radius: 6px;
-      cursor: pointer;
-      transition: 0.3s;
-      font-size: 14px;
-    }
-  
-    #declineCookies {
-      background: #f44336;
-    }
-  
-    button:hover {
-      opacity: 0.8;
-    }
-  
-    /* Tablet and Mobile Responsive */
-    @media (max-width: 1024px) {
-      #cookie-consent-banner {
-        flex-direction: column;
-        text-align: center;
-        padding: 15px;
-      }
-      #cookie-consent-banner p {
-        font-size: 16px;
-      }
-      #cookie-consent-banner div {
-        display: flex;
-        justify-content: center;
-        margin-top: 10px;
-      }
-      #cookie-consent-banner button {
-        width: 120px;
-        margin: 5px;
-        font-size: 16px;
-      }
-    }
-  </style>
+    <style>
+         /* Consent Banner Styles */
+        #consent-banner {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+            color: #333;
+            padding: 15px 20px;
+            width: 90%;
+            max-width: 400px;
+            border-radius: 12px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            font-family: Arial, sans-serif;
+            display: none;
+            z-index: 9999;
+            pointer-events: auto; /* Ensures it receives clicks */
+        }
+
+        /* Buttons */
+        button {
+            border: none;
+            padding: 10px 18px;
+            font-size: 14px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: 0.3s;
+            margin: 5px;
+        }
+        #accept-consent {
+            background: #4CAF50;
+            color: white;
+        }
+        #decline-consent {
+            background: #ddd;
+            color: #333;
+        }
+        button:hover {
+            opacity: 0.8;
+        }
+
+    </style>
   </head>
   <body>
-
-    <div id="cookie-consent-banner" style="display: none; position: fixed; bottom: 10px; left: 10px; right: 10px; background: linear-gradient(135deg, #6e8efb, #a777e3); color: white; padding: 12px 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); display: flex; align-items: center; justify-content: space-between; font-family: Arial, sans-serif; font-size: 14px; z-index: 1000;">
-      <p style="margin: 0; flex-grow: 1;">We use cookies to enhance your experience. Accept to continue.</p>
-      <div>
-        <button id="acceptCookies" style="background: #4CAF50; color: white; border: none; padding: 8px 16px; margin-left: 10px; border-radius: 6px; cursor: pointer; transition: 0.3s;">Accept</button>
-        <button id="declineCookies" style="background: #f44336; color: white; border: none; padding: 8px 16px; margin-left: 10px; border-radius: 6px; cursor: pointer; transition: 0.3s;">Decline</button>
-      </div>
+    <!-- Consent Banner -->
+    <div id="consent-banner">
+      <p>This website uses cookies for analytics. Do you accept?</p>
+      <button id="accept-consent">Accept</button>
+      <button id="decline-consent">Decline</button>
     </div>
-
+    
 
     <!-- Image Scanning UI -->
     <div class="example-container">
-      <div id="example-scanning-overlay" class="hidden" style="display: none;">
+      <div id="example-scanning-overlay" class="hidden">
 	      <div class="inner">
 	        <img src="target\image.jpg"/>
 	        <div class="scanline"></div>
@@ -407,7 +446,7 @@
       </div>
     <div>
       <!-- Scene Setup -->
-      <a-scene id="arCamera" visible=false mindar-image="filterMinCF:0.001; filterBeta: 50; warmupTolerance: 5; missTolerance: 5; imageTargetSrc: target/image.mind; showStats: false; uiScanning: #example-scanning-overlay;" embedded color-space="sRGB" renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false">
+      <a-scene mindar-image="filterMinCF:0.001; filterBeta: 50; warmupTolerance: 5; missTolerance: 5; imageTargetSrc: target/image.mind; autoStart: false; showStats: false; uiScanning: #example-scanning-overlay;" embedded color-space="sRGB" renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false">
         
         <!-- Assets -->
         <a-assets>
