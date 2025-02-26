@@ -63,7 +63,10 @@
         } else if (localStorage.getItem("ga_consent") === "granted") {
           
           enableTracking();
+          const videoMP4 = document.querySelector("#video-mp4");
           const scene = document.querySelector("a-scene");
+
+          videoMP4.pause();
 
           scene.addEventListener("loaded", () => {
             console.log("A-Frame Scene Loaded!");
@@ -88,6 +91,8 @@
         else if (localStorage.getItem("ga_consent") === "denied") {
           
           const scene = document.querySelector("a-scene");
+          const videoMP4 = document.querySelector("#video-mp4");
+          videoMP4.pause();
 
           scene.addEventListener("loaded", () => {
             console.log("A-Frame Scene Loaded!");
@@ -113,6 +118,8 @@
         acceptBtn.addEventListener("click", function () {
           localStorage.setItem("ga_consent", "granted");
           enableTracking();
+          const videoMP4 = document.querySelector("#video-mp4");
+          videoMP4.pause();
           scene.systems["mindar-image-system"].start();
           consentBanner.style.display = "none";
           
@@ -121,6 +128,8 @@
         declineBtn.addEventListener("click", function () {
           localStorage.setItem("ga_consent", "denied");
           consentBanner.style.display = "none";
+          const videoMP4 = document.querySelector("#video-mp4");
+          videoMP4.pause();
           scene.systems["mindar-image-system"].start();
         });
       };
