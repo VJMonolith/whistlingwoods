@@ -206,6 +206,8 @@
           const videoMP4 = document.querySelector("#video-mp4");
           const videoLink = document.querySelector("#video-link");
 
+          videoMP4.pause();
+
           // Play/Pause the video on pressing the play button
           function toggleVideoPlayback() {
             if (!isPlaying) {
@@ -261,10 +263,6 @@
           this.el.addEventListener('targetFound', event => {
             if (targetVisible) return; // Prevent multiple triggers
             targetVisible = true;
-
-            // Hide scanning UI when target is found
-            // scanningOverlay.classList.add("hidden");
-            // scanningOverlay.style.display = "none"; // Ensure it's completely removed
         
             showCta();
             showMedia(() => {
