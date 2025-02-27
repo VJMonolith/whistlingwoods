@@ -390,47 +390,125 @@
     }
     </style>
     <style>
-    /* Consent Banner Styles */
     #consent-banner {
-        position: fixed;
-        bottom: 10px;
-        left: 50%;
-        transform: translateX(-50%);
-        background:#f0f0f0;
-        color: #333;
-        padding: 10px 15px;
-        width: 80%;
-        max-width: 320px;
-        border-radius: 10px;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        text-align: center;
-        font-family: Arial, sans-serif;
-        font-size: 13px;
-        display: none;
-        z-index: 9999;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    max-width: 500px;
+    background: #f8f9fa;
+    color: #333;
+    padding: 32px; /* Increased padding for better spacing */
+    text-align: center;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+    font-family: Arial, sans-serif;
+    border-radius: 12px;
+    display: none;
+    z-index: 9999;
+    box-sizing: border-box;
+    line-height: 1.7; /* Optimized line spacing */
+}
+
+/* Adjust spacing on medium-sized screens */
+@media (max-width: 1024px) {
+    #consent-banner {
+        width: 85%;
+        max-width: 450px;
+        padding: 28px;
     }
-    
-    /* Buttons */
+}
+
+/* Adjust spacing for smaller tablets and large phones */
+@media (max-width: 768px) {
+    #consent-banner {
+        width: 90%;
+        max-width: 400px;
+        padding: 25px;
+    }
+}
+
+/* Ensure it looks good on smaller phones */
+@media (max-width: 480px) {
+    #consent-banner {
+        width: 90%;
+        max-width: 360px;
+        padding: 20px;
+    }
+}
+
+/* Heading */
+#consent-banner h2 {
+    font-size: 22px;
+    margin-bottom: 16px;
+}
+
+/* Paragraphs */
+#consent-banner p {
+    font-size: 15px;
+    margin: 14px 0;
+}
+
+/* List for Transparency */
+#consent-banner ul {
+    text-align: left;
+    font-size: 14px;
+    margin: 18px auto;
+    padding-left: 25px; /* Proper indentation */
+    list-style-type: disc;
+    max-width: 380px;
+}
+
+#consent-banner ul li {
+    margin-bottom: 10px;
+}
+
+/* Button container */
+.consent-buttons {
+    margin-top: 25px;
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+/* Stack buttons on small screens */
+@media (max-width: 480px) {
+    .consent-buttons {
+        flex-direction: column;
+    }
+
     button {
-        border: none;
-        padding: 8px 14px;
-        font-size: 12px;
-        border-radius: 16px;
-        cursor: pointer;
-        transition: 0.3s;
-        margin: 3px;
+        width: 100%;
+        min-width: 160px;
+        padding: 14px;
     }
-    #accept-consent {
-        background: #4CAF50;
-        color: white;
-    }
-    #decline-consent {
-        background: #ddd;
-        color: #333;
-    }
-    button:hover {
-        opacity: 0.8;
-    }
+}
+
+/* Buttons */
+button {
+    border: none;
+    padding: 14px 24px;
+    font-size: 16px;
+    border-radius: 24px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+#accept-consent {
+    background: #4CAF50;
+    color: white;
+}
+
+#decline-consent {
+    background: #ddd;
+    color: #333;
+}
+
+button:hover {
+    opacity: 0.85;
+}
+
 </style>
   </head>
   <body>
@@ -442,12 +520,31 @@
     </div> -->
 
     <!-- Consent Banner -->
-    <div id="consent-banner">
+    <!-- <div id="consent-banner">
       <p>This website uses cookies for analytics. By continuing, you accept our use of cookies.</p>
       <p><a href="/terms.html">Read our Terms & Conditions</a></p>
       <button id="accept-consent">Accept</button>
       <button id="decline-consent">Decline</button>
-    </div>
+    </div> -->
+    <div id="consent-banner" role="dialog" aria-labelledby="consent-title">
+      <h2 id="consent-title">We Respect Your Privacy</h2>
+      
+      <p>Your privacy is important to us. We use cookies to:</p>
+      <ul>
+          <li>Enhance your browsing experience</li>
+          <li>Analyze website traffic for improvements</li>
+          <li>Ensure website security and performance</li>
+      </ul>
+  
+      <p>By clicking "Accept", you consent to our use of cookies as outlined in our <a href="/privacy.html">Privacy Policy</a>.</p>
+      <p>For more details, see our <a href="/terms.html">Terms & Conditions</a>.</p>
+  
+      <div class="consent-buttons">
+          <button id="accept-consent" aria-label="Accept cookies">Accept and Continue</button>
+          <button id="decline-consent" aria-label="Decline cookies">Ignore</button>
+      </div>
+  </div>
+  
     
 
     <!-- Image Scanning UI -->
