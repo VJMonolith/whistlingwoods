@@ -390,49 +390,48 @@
     }
     </style>
     <style>
-         /* Consent Banner Styles */
-        #consent-banner {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: white;
-            color: #333;
-            padding: 15px 20px;
-            width: 90%;
-            max-width: 400px;
-            border-radius: 12px;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            font-family: Arial, sans-serif;
-            display: none;
-            z-index: 9999;
-            pointer-events: auto; /* Ensures it receives clicks */
-        }
-
-        /* Buttons */
-        button {
-            border: none;
-            padding: 10px 18px;
-            font-size: 14px;
-            border-radius: 20px;
-            cursor: pointer;
-            transition: 0.3s;
-            margin: 5px;
-        }
-        #accept-consent {
-            background: #4CAF50;
-            color: white;
-        }
-        #decline-consent {
-            background: #ddd;
-            color: #333;
-        }
-        button:hover {
-            opacity: 0.8;
-        }
-
-    </style>
+    /* Consent Banner Styles */
+    #consent-banner {
+        position: fixed;
+        bottom: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: white;
+        color: #333;
+        padding: 10px 15px;
+        width: 80%;
+        max-width: 320px;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        font-family: Arial, sans-serif;
+        font-size: 13px;
+        display: none;
+        z-index: 9999;
+    }
+    
+    /* Buttons */
+    button {
+        border: none;
+        padding: 8px 14px;
+        font-size: 12px;
+        border-radius: 16px;
+        cursor: pointer;
+        transition: 0.3s;
+        margin: 3px;
+    }
+    #accept-consent {
+        background: #4CAF50;
+        color: white;
+    }
+    #decline-consent {
+        background: #ddd;
+        color: #333;
+    }
+    button:hover {
+        opacity: 0.8;
+    }
+</style>
   </head>
   <body>
     <!-- Consent Banner -->
@@ -445,7 +444,7 @@
     <!-- Consent Banner -->
     <div id="consent-banner">
       <p>This website uses cookies for analytics. By continuing, you accept our use of cookies.</p>
-      <p><a href="https://monolithtech-my.sharepoint.com/:b:/g/personal/jvinayagam_monolith_asia/EQccGMM8tZFAiRi1hChVoskB-Z3UXpgoqSHiz8YrsNeMbA?e=MYMffH" target="_blank">Read our Terms & Conditions</a></p>
+      <p><a href="/terms.html">Read our Terms & Conditions</a></p>
       <button id="accept-consent">Accept</button>
       <button id="decline-consent">Decline</button>
     </div>
